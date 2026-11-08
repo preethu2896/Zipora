@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.env*
+!.env.example
+.vercel/
+*.log
+
+/.vercel/
+*.log
+/research/
+/Zipora-source.zip
+/Zipora-static.zip
+/Zipora-Complete-Website-Prompt.txt

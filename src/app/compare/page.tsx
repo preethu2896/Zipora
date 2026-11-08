@@ -1,0 +1,5 @@
+import Link from 'next/link';
+import { SiteHeader,SiteFooter } from '@/components/site-chrome';
+import { comparisons } from '@/lib/comparisons';
+export const metadata={title:'Compare Zipora with Other File Tools | Zipora',description:'Read factual comparisons of Zipora, iLovePDF and remove.bg, including current feature availability.',alternates:{canonical:'/compare/'}};
+export default function Page(){return <><SiteHeader active="Compare"/><main className="main-shell editorial"><nav className="breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span>›</span><span aria-current="page">Compare</span></nav><section className="intro"><div><h1>Compare file workflows</h1><p>Free, no signup. Zipora processes files in your browser. Compare the task you need and check each service’s current details.</p></div></section><section className="related-tools"><h2>Two comparisons</h2><div>{comparisons.map(c=><Link key={c.slug} href={`/compare/${c.slug}/`}><strong>Zipora vs {c.competitor}</strong><p>{c.intro}</p></Link>)}</div></section></main><SiteFooter/></>;}

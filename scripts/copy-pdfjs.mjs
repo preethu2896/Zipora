@@ -1,0 +1,14 @@
+import { cpSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const root = dirname(require.resolve('pdfjs-dist/package.json'));
+const output = join(process.cwd(), 'public', 'pdfjs');
+mkdirSync(output, { recursive: true });
+cpSync(join(root, 'build', 'pdf.worker.min.mjs'), join(output, 'pdf.worker.min.mjs'));
+cpSync(join(root, 'LICENSE'), join(output, 'LICENSE'));
+for (const name of ['standard_fonts', 'cmaps', 'wasm']) cpSync(join(root, name), join(output, name), { recursive: true });
+console.log('Copied matching PDF.js worker and rendering resources');
+const portrait = join(process.cwd(), 'public', 'portrait');
+mkdirSync(portrait, { recursive: true });
+cpSync(join(process.cwd(), 'node_modules', '@mediapipe', 'tasks-vision', 'wasm'), join(portrait, 'wasm'), { recursive: true });
