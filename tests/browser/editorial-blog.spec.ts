@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test';
 import {blogPosts,blogPaths} from '../../src/lib/blog';
+import {absoluteUrl} from '../../src/lib/site-url';
 
 test('contact mail links and privacy date are live without changing issue guidance',async({page})=>{
  await page.goto('/contact/');
@@ -53,7 +54,7 @@ test('twelve blog cards and ten distinct articles export with schema, sources an
   expect(article.datePublished).toBe('2026-11-08');expect(article.dateModified).toBe('2026-11-08');
   expect(faq.mainEntity).toHaveLength(3);
   expect(await page.locator('.faqs details').evaluateAll(d=>d.map(d=>d.querySelector('p')!.textContent))).toEqual(faq.mainEntity.map((q:any)=>q.acceptedAnswer.text));
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',`https://zipora.online/blog/${post.slug}/`);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',absoluteUrl(`/blog/${post.slug}/`));
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),post.slug).toBeTruthy();
   await expect(page.locator('.ad-blog-table')).toHaveCount(1);await expect(page.locator('.ad-footer')).toHaveCount(1);
   await expect(page.locator('.footer-tools a')).toHaveCount(19);
@@ -65,7 +66,7 @@ test('sitemap, bot rules and llms include all blog routes',async({request})=>{
  const sitemap=await (await request.get('/sitemap.xml')).text();
  const llms=await (await request.get('/llms.txt')).text();
  const robots=await (await request.get('/robots.txt')).text();
- for(const path of blogPaths){expect(sitemap).toContain(`https://zipora.online${path}`);expect(llms).toContain(`https://zipora.online${path}`);}
+ for(const path of blogPaths){expect(sitemap).toContain(absoluteUrl(path));expect(llms).toContain(absoluteUrl(path));}
  for(const agent of ['GPTBot','ClaudeBot','PerplexityBot','Google-Extended'])expect(robots).toContain(`User-Agent: ${agent}`);
  expect(robots).not.toContain('Disallow: /');
 });

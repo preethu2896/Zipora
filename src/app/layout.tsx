@@ -4,11 +4,14 @@ import './polish.css';
 import { ToolSearchProvider } from '@/components/tool-search';
 import { siteUrl } from '@/lib/site-url';
 import { ToolRouteScroll } from '@/components/tool-route-scroll';
+import { JsonLd } from '@/components/json-ld';
+import { siteDescription, siteSchema } from '@/lib/seo';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: 'Zipora — Free Online PDF & Image Tools, No Signup',
-  description: 'Free browser-based PDF, image and QR tools. No signup, no file uploads and no output watermarks.',
+  description: siteDescription,
+  applicationName: 'Zipora',
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html id="top" lang="en"><body><ToolSearchProvider><ToolRouteScroll/>{children}</ToolSearchProvider></body></html>;
+  return <html id="top" lang="en"><body><JsonLd data={siteSchema()}/><ToolSearchProvider><ToolRouteScroll/>{children}</ToolSearchProvider></body></html>;
 }

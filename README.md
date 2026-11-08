@@ -49,7 +49,7 @@ Canonical resizer URL: `/resize-image/`. Existing `/image-resizer/` and `/pdf-co
 After buying a domain, copy `.env.example` to `.env.local` and set:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://your-real-domain
+# Canonical origin: https://www.zipora.online (src/lib/site-url.ts)
 NEXT_PUBLIC_CONTACT_EMAIL=your-real-public-contact-address
 ```
 
@@ -139,7 +139,7 @@ Download actions use the supplied animated `src/components/buttons/download-butt
 
 The interface uses [Unslop by Damir Sokolovsky](https://github.com/heydamir/unslop), CC BY 4.0, with Zipora's approved graphite/white/blue document-workspace direction. See `research/ZIPORA-PLAN.md` and `research/ZIPORA-VERIFICATION.md`.
 
-The reference websites were inspected with REA. Historical raw evidence remains in the original workspace’s `research/` directory; the delivery archive includes current Zipora reports and official comparison sources only. None of that third-party source is imported or served by the app. Some public dependency versions were observable; unseen backend details remain unknown. Current comparison sources are linked from the comparison pages and retained in the research text files. The default public canonical domain is https://zipora.online. No hosting deployment or email mailbox was created by these source changes.
+The reference websites were inspected with REA. Historical raw evidence remains in the original workspace’s `research/` directory; the delivery archive includes current Zipora reports and official comparison sources only. None of that third-party source is imported or served by the app. Some public dependency versions were observable; unseen backend details remain unknown. Current comparison sources are linked from the comparison pages and retained in the research text files. The public canonical origin is https://www.zipora.online. No hosting deployment or email mailbox was created by these source changes.
 
 
 ## Latest layout fixes
@@ -160,7 +160,7 @@ PDF-to-JPG shows six smaller previews initially, with expand/collapse and per-pa
 
 `/blog/` lists twelve comparisons: ten articles under `/blog/` and the two existing `/compare/` pages. Post data, official sources, checked dates and tool links live in `src/lib/blog.ts`. Posts export as static HTML with unique metadata, Article and visible-matching FAQPage schemas. Re-check official sources before changing facts or advancing a checked date; never reuse a price across regions or infer an unpublished allowance.
 
-Public URL defaults to `https://zipora.online` and the public email defaults to `contact@zipora.online`. Optional `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_CONTACT_EMAIL` environment values override those defaults at build time. Rebuild after changing them. Mailto links open the visitor's email application; hosting the site does not create or verify that mailbox.
+The canonical origin is fixed to `https://www.zipora.online` in `src/lib/site-url.ts`, matching the www production host. `NEXT_PUBLIC_SITE_URL` is no longer used, preventing an old apex-domain override from changing production canonicals. The public email defaults to `contact@zipora.online`; `NEXT_PUBLIC_CONTACT_EMAIL` can override it at build time. Rebuild after changing the contact value. Mailto links open the visitor's email application; hosting the site does not create or verify that mailbox.
 
 The shared route scroll component resets page entry and same-page links to the top, including links from the footer. Explicit anchors such as `/#tools` retain their section behavior. The nineteen processing tools were not rebuilt or given new URLs.
 

@@ -16,7 +16,7 @@ test('nineteen tool pages have unique metadata, honest content, valid schema and
   await expect(page.locator('.ad-slot')).toHaveCount(3);await expect(page.locator('[data-slot=sunset-bloom-background]')).toHaveCount(0);
   const graph=await page.locator('script[type="application/ld+json"]').evaluateAll(nodes=>nodes.flatMap(node=>JSON.parse(node.textContent||'{}')['@graph']||[]));
   expect(graph.map(x=>x['@type'])).toEqual(expect.arrayContaining(['SoftwareApplication','FAQPage','HowTo']));
-  expect(graph.find(x=>x['@type']==='SoftwareApplication')).toMatchObject({name:'Zipora',offers:{price:'0'}});
+  expect(graph.find(x=>x['@type']==='SoftwareApplication')).toMatchObject({name:`Zipora ${tool.name}`,url:absoluteUrl(`/${tool.slug}/`),offers:{price:'0'}});
   const related=await page.locator('.related-tools a').evaluateAll(nodes=>nodes.map(a=>a.getAttribute('href')));expect(related).toEqual(tool.related.map(slug=>`/${slug}/`));
   expect(await page.locator('body').innerText()).not.toMatch(new RegExp(['file','bolt'].join(''),'i'));
  }

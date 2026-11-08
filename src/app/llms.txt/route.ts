@@ -1,5 +1,34 @@
-import { blogPosts } from '@/lib/blog';
-import { siteTools,comparisonPaths } from '@/lib/site-content';
-import { absoluteUrl } from '@/lib/site-url';
-export const dynamic='force-static';
-export function GET(){const text=['# Zipora','','> Free PDF, image and QR tools. No signup. Files are processed in your browser.','','## Live tools',...siteTools.map(t=>`- [${t.name}](${absoluteUrl(`/${t.slug}/`)}): ${t.description}`),'','## Comparisons',...comparisonPaths.map(path=>`- [${path.includes('ilovepdf')?'Zipora vs iLovePDF':'Zipora vs remove.bg — standalone removal Coming Soon'}](${absoluteUrl(path)})`),'','## Blog',`- [Zipora Blog](${absoluteUrl('/blog/')}): Comparisons checked against official sources`,...blogPosts.map(p=>`- [${p.h1}](${absoluteUrl(`/blog/${p.slug}/`)}): ${p.summary}`),'','## Practical limits','PDF/image/page/memory limits apply. PDF byte targets are not guaranteed. Photo framing does not certify official acceptance. General Remove Background and Watermark Remover are Coming Soon, not live tools.','','## Company',...['about','contact','privacy-policy','terms'].map(slug=>`- ${absoluteUrl(`/${slug}/`)}`),''].join('\n');return new Response(text,{headers:{'Content-Type':'text/plain; charset=utf-8'}});}
+import { blogPosts, checkedDate } from '@/lib/blog';
+import { siteTools } from '@/lib/site-content';
+import { absoluteUrl, contactEmail } from '@/lib/site-url';
+export const dynamic = 'force-static';
+
+export function GET() {
+  const text = [
+    '# Zipora', '',
+    '> Zipora offers 19 free browser-based PDF, image and static QR tools. No signup or payment is required. Selected file contents are processed on the visitor’s device, not uploaded to a processing server.', '',
+    `Canonical website: ${absoluteUrl('/')}`,
+    'Website assets, PDF rendering resources and the optional portrait model are downloaded from the host. This is separate from uploading a selected file.', '',
+    '## Live tools',
+    ...siteTools.map(t => `- [${t.name}](${absoluteUrl(`/${t.slug}/`)}): ${t.description}`), '',
+    '## Comparisons and educational content',
+    `- [Compare file workflows](${absoluteUrl('/compare/')}): Supported tasks, processing and availability.`,
+    `- [Zipora vs iLovePDF](${absoluteUrl('/compare/zipora-vs-ilovepdf/')}): Local PDF tasks versus a broader PDF suite.`,
+    `- [Zipora vs remove.bg](${absoluteUrl('/compare/zipora-vs-removebg/')}): Image tools and availability; Zipora’s standalone background remover is not live.`,
+    `- [Zipora Blog](${absoluteUrl('/blog/')}): Dated comparisons citing official sources; original fact-check date ${checkedDate}. Prices and service terms can change.`,
+    ...blogPosts.map(p => `- [${p.h1}](${absoluteUrl(`/blog/${p.slug}/`)}): ${p.summary}`), '',
+    '## Scope and limitations',
+    'PDF tools include merge, split, compression, JPG/PNG-to-PDF and PDF-page-to-image conversion. Image tools cover compression, resizing, JPG/PNG conversion and portrait framing. The QR generator exports static PNG or SVG codes; it does not provide scan analytics or editable redirects.',
+    'File, page, pixel and browser-memory limits apply. PDF size targets are not guaranteed. Balanced PDF compression preserves selectable text; Strong can rasterize pages at 150 DPI and lose document features. Image size targets may reduce dimensions. Passport framing and optional local portrait background replacement do not certify official acceptance.',
+    'General Remove Background and Watermark Remover are Coming Soon, not available tools. No OCR, PDF-to-Word conversion or official photo certification is offered.', '',
+    '## About, contact and legal information',
+    `- [About Zipora](${absoluteUrl('/about/')}): Identity, supported tasks and local processing.`,
+    `- [Contact Zipora](${absoluteUrl('/contact/')}): Tool issues, feedback and corrections.`,
+    `- [Email Zipora](mailto:${contactEmail}): Do not send private files or identity documents.`,
+    `- [Privacy Policy](${absoluteUrl('/privacy-policy/')}): File processing, website delivery and the current tracker/ad policy.`,
+    `- [Terms of Use](${absoluteUrl('/terms/')}): Output checks, use and practical limits.`,
+    `- [Third-party notices](${absoluteUrl('/third-party-notices.txt')}): Bundled software and asset notices.`, '',
+    'This file is a factual navigation aid. It is not a promise of search indexing, rankings or AI citations.', '',
+  ].join('\n');
+  return new Response(text, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+}

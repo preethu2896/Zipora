@@ -3,4 +3,5 @@ import { blogPaths } from '@/lib/blog';
 import { publicPaths } from '@/lib/site-content';
 import { absoluteUrl } from '@/lib/site-url';
 export const dynamic='force-static';
-export default function sitemap():MetadataRoute.Sitemap{return [...publicPaths,...blogPaths].map(path=>({url:absoluteUrl(path)}));}
+// Omit lastModified unless a page has a maintained content-change date; a build is not an edit.
+export default function sitemap():MetadataRoute.Sitemap{return [...new Set([...publicPaths,...blogPaths])].map(path=>({url:absoluteUrl(path)}));}

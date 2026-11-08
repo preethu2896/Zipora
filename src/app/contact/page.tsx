@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo';
 import CompanyPage, { companyTitle } from '@/components/company-page';
-export const metadata={title:`${companyTitle('contact')} | Zipora`,description:'Learn about Zipora, its free browser-based tools and how the current service works.',alternates:{canonical:'/contact/'}};
+export const metadata = pageMetadata('/contact/', `${companyTitle('contact')} | Zipora`, 'Contact Zipora at contact@zipora.online for tool issues, feedback or corrections. Include your browser and device; do not email private files.');
 export default function Page(){return <CompanyPage slug="contact"/>;}
