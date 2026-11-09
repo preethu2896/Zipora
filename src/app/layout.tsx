@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: 'Zipora — Free Online PDF & Image Tools, No Signup',
   description: siteDescription,
   applicationName: 'Zipora',
+  verification: { other: { 'msvalidate.01': '23D589D329DA0DF7BB87D77E51035641' } },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return <html id="top" lang="en"><body><JsonLd data={siteSchema()}/><ToolSearchProvider><ToolRouteScroll/>{children}</ToolSearchProvider></body></html>;
