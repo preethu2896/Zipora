@@ -112,7 +112,7 @@ export function GeminiCleanup({ video }: { video: boolean }) {
         <h3>Your {video ? 'video' : 'image'} is ready</h3>
         <DownloadButton href={processed} download={filename} label={`Download ${extension.toUpperCase()}`}/>
       </div><AdSlot position="download"/></>}
-      {video && busy && <iframe ref={runtime} hidden title="Local video processing engine" src="/gemini-runtime/index.html"
+      {video && busy && <iframe ref={runtime} hidden title="Local video processing engine" src="/gemini-runtime/"
         onLoad={() => runtime.current?.contentWindow?.postMessage({ type: 'gemini-run', file }, location.origin)}/>}
     </section>
     <div className="tool-sidebar"><aside className="side-panel">
