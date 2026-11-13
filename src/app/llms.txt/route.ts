@@ -6,7 +6,7 @@ export const dynamic = 'force-static';
 export function GET() {
   const text = [
     '# Zipora', '',
-    '> Zipora offers 37 free browser-based PDF, image, QR, JSON, favicon, text, URL and UUID tools. No signup or payment is required. Selected file contents are processed on the visitor’s device, not uploaded to a processing server.', '',
+    '> Zipora offers 39 free browser-based PDF, image, QR, JSON, favicon, text, URL and UUID tools. No signup or payment is required. Selected file contents are processed on the visitor’s device, not uploaded to a processing server.', '',
     `Canonical website: ${absoluteUrl('/')}`,
     'Website assets, PDF rendering resources and the optional portrait model are downloaded from the host. This is separate from uploading a selected file.', '',
     '## Live tools',
@@ -20,7 +20,7 @@ export function GET() {
     '## Scope and limitations',
     'PDF tools include merge, split, rotation, watermarking, page numbering, password protection, compression, JPG/PNG-to-PDF and PDF-page-to-image conversion. Image tools cover compression, cropping, rotation, resizing, JPG/PNG, WebP and HEIC conversion and portrait framing. The QR generator exports static PNG or SVG codes; it does not provide scan analytics or editable redirects.',
     'File, page, pixel and browser-memory limits apply. PDF size targets are not guaranteed. Balanced PDF compression preserves selectable text; Strong can rasterize pages at 150 DPI and lose document features. Image size targets may reduce dimensions. Passport framing and optional local portrait background replacement do not certify official acceptance.',
-    'General Remove Background and Watermark Remover are Coming Soon, not available tools. PDF to Word and PDF to Excel convert PDFs with selectable text. Zipora does not offer OCR or official photo certification.', '',
+    'General Remove Background is Coming Soon. Supported Gemini image and video watermark cleanup is available. PDF to Word and PDF to Excel convert PDFs with selectable text. Zipora does not offer OCR or official photo certification.', '',
     '## About, contact and legal information',
     `- [About Zipora](${absoluteUrl('/about/')}): Identity, supported tasks and local processing.`,
     `- [Contact Zipora](${absoluteUrl('/contact/')}): Tool issues, feedback and corrections.`,

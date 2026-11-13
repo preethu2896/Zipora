@@ -26,7 +26,9 @@ async function signature(file: File) {
   if (ascii.slice(4, 8) === 'ftyp') {
     const { hasHeicHeader } = await import('@/lib/heic-conversion');
     if (await hasHeicHeader(file)) return 'heic';
+    return 'video';
   }
+  if (ascii.startsWith('\x1aE\xdf\xa3')) return 'video';
   if (bytes[0] === 80 && bytes[1] === 75 && bytes[2] === 3 && bytes[3] === 4) return 'office-zip';
   if ([208,207,17,224,161,177,26,225].every((byte, index) => bytes[index] === byte)) return 'office-legacy';
   return '';
@@ -36,6 +38,7 @@ function allowedTypes(accept: string) {
   return [
     [/pdf/, 'pdf'], [/jpe?g/, 'jpg'], [/png/, 'png'], [/webp/, 'webp'], [/hei[cf]/, 'heic'],
     [/docx|xlsx/, 'office-zip'], [/\.doc,|\.xls,|,\.doc$|,\.xls$/, 'office-legacy'],
+    [/video\//, 'video'],
   ].filter(([pattern]) => (pattern as RegExp).test(accept)).map(([, type]) => String(type));
 }
 

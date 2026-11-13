@@ -8,11 +8,12 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
-    "predev": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs",
-    "prebuild": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs"
+    "predev": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs",
+    "prebuild": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.2.2",
+    "@pilio/gemini-watermark-remover": "1.0.46",
     "@soulehshaikh99/qpdf-wasm": "0.4.1",
     "clsx": "^2.1.1",
     "heic-to": "1.6.7",

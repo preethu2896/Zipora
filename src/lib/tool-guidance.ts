@@ -20,6 +20,20 @@ export const toolMeasurements: Partial<Record<string, string>> = {
 };
 
 export const toolGuidance: Record<string, ToolGuidance> = {
+  "gemini-watermark-remover": {
+    title: "Gemini Image Watermark Remover – Local PNG Export",
+    description: "Remove supported visible Gemini logos from PNG, JPG or WebP images. Compare the result and download a PNG in your browser.",
+    heading: "Check detail beneath the logo",
+    example: "Compare the original and cleaned image where the mark crosses text or texture. Review that area before saving the PNG.",
+    related: ["gemini-video-watermark-remover", "crop-image", "image-compressor"],
+  },
+  "gemini-video-watermark-remover": {
+    title: "Gemini Video Watermark Remover – Local MP4 Export",
+    description: "Clean supported visible Gemini and Veo-style video watermarks in desktop Chrome or Edge. Preview the result and download an MP4.",
+    heading: "Review the result across frames",
+    example: "Try a short clip first. Play the cleaned version and check that the marked area looks consistent throughout the clip.",
+    related: ["gemini-watermark-remover", "crop-image"],
+  },
   "pdf-to-excel": {
     title: "PDF to Excel Converter Online – Extract Tables to XLSX",
     description: "Extract selectable text and table values from a PDF into an editable Excel workbook. Convert to XLSX in your browser without uploading your file.",

@@ -80,7 +80,7 @@ test('split handles locked inputs, phone layout, and all-tool navigation', async
   await upload(page);
   await page.getByRole('tab', { name: 'Extract pages' }).click();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await expect(page.locator('.footer-tools a')).toHaveCount(37);
+  await expect(page.locator('.footer-tools a')).toHaveCount(39);
   await page.screenshot({ path: 'research/split-pdf-mobile.png', fullPage: true });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.getByRole('tab', { name: 'Ranges', exact: true }).click();

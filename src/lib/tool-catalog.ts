@@ -1,5 +1,7 @@
 import { extraTools } from './extra-tools';
 export const tools = [
+  { href: '/gemini-watermark-remover/', name: 'Gemini Image Watermark Remover', description: 'Clean supported Gemini image marks.' },
+  { href: '/gemini-video-watermark-remover/', name: 'Gemini Video Watermark Remover', description: 'Clean supported Gemini video marks.' },
   { href: '/merge-pdf/', name: 'Merge PDF', description: 'Arrange your documents. Save them as one.' },
   { href: '/split-pdf/', name: 'Split PDF', description: 'Separate ranges. Keep just the pages you need.' },
   { href: '/rotate-pdf/', name: 'Rotate PDF', description: 'Turn PDF pages upright.' },

@@ -4,6 +4,16 @@ export type Faq={question:string;answer:string};
 export type ToolInfo={slug:string;name:string;group:'PDF Tools'|'Image Tools'|'Other Tools';title:string;h1:string;description:string;cardDescription:string;steps:[string,string][];faqs:Faq[];related:string[]};
 type Detail={steps:[string,string][];facts:[string,string,string];questions:[string,string,string]};
 const details:Record<string,Detail>={
+ 'gemini-watermark-remover':{
+  steps:[['Select an image','Choose a Gemini PNG, JPG or WebP up to 20 MB.'],['Remove the mark','Zipora looks for a supported visible Gemini logo.'],['Compare and download','Review the cleaned area and save the PNG.']],
+  questions:['Which images work?','Are images uploaded?','Can I keep the same dimensions?'],
+  facts:['The tool targets supported visible Gemini logos. Use images you own or have permission to edit.','No. Zipora processes your image locally in the browser.','Yes. The tool keeps the source dimensions and exports a PNG, subject to the 16-megapixel and 8192-pixel side limits.'],
+ },
+ 'gemini-video-watermark-remover':{
+  steps:[['Select a clip','Choose a short Gemini or Veo MP4, WebM or MOV up to 50 MB.'],['Remove the mark','Use desktop Chrome or Edge to detect and clean a supported mark across frames.'],['Compare and download','Check the processed video, then download the MP4.']],
+  questions:['Which clips work?','Will the output keep its audio?','Is the video uploaded?'],
+  facts:['The tool targets supported visible Gemini and Veo-style watermarks. Browser codec support varies. Use short clips you own or have permission to edit.','The video is re-encoded. Compatible source audio may be retained. Check playback before sharing.','No. The engine and video processing run in your browser.'],
+ },
  'pdf-to-excel':{
   steps:[['Select a PDF','Choose or drop one PDF with selectable text, up to 20 MB.'],['Convert to Excel','Zipora uses text positions to infer rows and columns. All pages with text are included in PDF order.'],['Download the XLSX','Open the workbook in Excel and check the inferred columns and values.']],
   questions:['Can I convert a scanned PDF to Excel?','How are multiple PDF pages handled?','Will the workbook include formulas and exact formatting?'],
@@ -124,6 +134,8 @@ const toolHeadings:Record<string,string>={
  'qr-code-generator':'QR Code Generator Free Online',
 };
 const cardDescriptions:Record<string,string>={
+ 'gemini-watermark-remover':'Clean supported Gemini image marks.',
+ 'gemini-video-watermark-remover':'Clean supported Gemini video marks.',
  'uuid-generator':'Generate random UUIDs.',
  'url-encoder':'Encode or decode URLs.',
  'word-counter':'Count words and characters.',
@@ -162,7 +174,7 @@ export const siteTools:ToolInfo[]=existingTools.map(tool=>{
  const name=slug==='resize-image'?'Resize Image':tool.name.replace(/ (\d+) KB/,' $1KB');
  const h1=toolHeadings[slug] ?? `${name} Online Free`;
  const guidance=toolGuidance[slug];
- return {slug,name,group:(slug==='qr-code-generator'||slug==='json-formatter'||slug==='favicon-generator'||slug==='word-counter'||slug==='url-encoder'||slug==='uuid-generator')?'Other Tools':name.includes('PDF')?'PDF Tools':'Image Tools',title:`${guidance.title} | Zipora`,h1,description:guidance.description,cardDescription:cardDescriptions[slug],steps:detail.steps,faqs:detail.questions.map((question,i)=>({question,answer:detail.facts[i]})),related:guidance.related};
+ return {slug,name,group:(slug==='gemini-video-watermark-remover'||slug==='qr-code-generator'||slug==='json-formatter'||slug==='favicon-generator'||slug==='word-counter'||slug==='url-encoder'||slug==='uuid-generator')?'Other Tools':name.includes('PDF')?'PDF Tools':'Image Tools',title:`${guidance.title} | Zipora`,h1,description:guidance.description,cardDescription:cardDescriptions[slug],steps:detail.steps,faqs:detail.questions.map((question,i)=>({question,answer:detail.facts[i]})),related:guidance.related};
 });
 export function toolInfo(slug:string){const match=siteTools.find(t=>t.slug===(slug==='image-resizer'?'resize-image':slug));if(!match)throw new Error(`Unknown tool: ${slug}`);return match;}
 export const comparisonPaths=['/compare/zipora-vs-ilovepdf/','/compare/zipora-vs-removebg/'];

@@ -90,3 +90,8 @@ SOFTWARE.
 
 Liberation Sans (used by PDF.js and Word to PDF)
 SIL Open Font License: /pdfjs/standard_fonts/LICENSE_LIBERATION
+
+Gemini Watermark Remover browser engine (MIT)
+https://github.com/GargantuaX/gemini-watermark-remover
+License: /gemini-runtime/LICENSE
+Runtime third-party notices: /gemini-runtime/onnxruntime/ThirdPartyNotices.txt
