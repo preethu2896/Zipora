@@ -46,17 +46,17 @@ test('compact mobile header/menu, quiet hero, grouped cards and public contact w
  await page.setViewportSize({width:768,height:1000});expect(await columns()).toBe(2);
  await page.setViewportSize({width:1440,height:1000});expect(await columns()).toBe(3);
  await page.setViewportSize({width:390,height:844});
- await page.getByRole('button',{name:'Open navigation'}).click();await expect(page.locator('#main-navigation')).toBeVisible();await page.locator('#main-navigation').getByRole('link',{name:'Image Tools',exact:true}).click();await expect(page.getByRole('button',{name:'Open navigation'})).toBeVisible();
+ await page.getByRole('button',{name:'Open navigation'}).click();await expect(page.locator('#home-navigation')).toBeVisible();await page.locator('#home-navigation').getByRole('link',{name:'Image Tools',exact:true}).click();await expect(page.getByRole('button',{name:'Open navigation'})).toBeVisible();
  for(const path of publicPaths){await page.goto(path);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),path).toBeTruthy();if(siteTools.some(t=>path===`/${t.slug}/`)){await expect(page.locator('.side-panel')).toBeHidden();await expect(page.locator('.ad-sidebar')).toBeVisible();}}
  await page.goto('/contact/');await expect(page.locator('.contact-address')).toHaveText(`Contact email: ${contactEmail}`);await expect(page.locator('.contact-address a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('.contact-message a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('main')).not.toContainText('Contact email — coming soon');
- await page.goto('/compare/zipora-vs-removebg/');await expect(page.locator('.availability-note')).toContainText('Coming Soon');await expect(page.locator('.sources a').first()).toHaveAttribute('href','https://www.remove.bg/faq');
+ await page.goto('/compare/zipora-vs-removebg/');await expect(page.locator('.availability-note')).toContainText('Remove Background is available');await expect(page.locator('.sources a').first()).toHaveAttribute('href','https://www.remove.bg/faq');
 });
 
-test('all card descriptions fit fully on one line at phone and desktop widths',async({page})=>{
- for(const width of [390,1440]){
+test('all card descriptions fit without truncation at phone and desktop widths',async({page})=>{
+ for(const width of [390,500,1440]){
   await page.setViewportSize({width,height:1000});await page.goto('/');
   await expect(page.locator('.home-tool-list .tool-link p')).toHaveCount(41);
-  const failures=await page.locator('.home-tool-list .tool-link p,.popular-grid p').evaluateAll(nodes=>nodes.filter(node=>{const el=node as HTMLElement,style=getComputedStyle(el);return el.scrollWidth>el.clientWidth+1||el.getBoundingClientRect().height>parseFloat(style.lineHeight)+1||el.textContent?.includes('...');}).map(el=>el.textContent));
+  const failures=await page.locator('.home-tool-list .tool-link p,.popular-grid p').evaluateAll(nodes=>nodes.filter(node=>{const el=node as HTMLElement,style=getComputedStyle(el);return el.scrollWidth>el.clientWidth+1||el.getBoundingClientRect().height>2*parseFloat(style.lineHeight)+1||el.textContent?.includes('...');}).map(el=>el.textContent));
   expect(failures).toEqual([]);await expect(page.locator('.site-header input')).toHaveCount(0);
   expect(await page.locator('.site-header').evaluate(el=>el.getBoundingClientRect().height)).toBeLessThanOrEqual(65);
  }
