@@ -1,3 +1,4 @@
+import { removeBgArticle } from '@/lib/remove-bg-article';
 import { blogPosts, checkedDate } from '@/lib/blog';
 import { siteTools } from '@/lib/site-content';
 import { absoluteUrl, contactEmail } from '@/lib/site-url';
@@ -16,6 +17,7 @@ export function GET() {
     `- [Zipora vs iLovePDF](${absoluteUrl('/compare/zipora-vs-ilovepdf/')}): Local PDF tasks versus a broader PDF suite.`,
     `- [Zipora vs remove.bg](${absoluteUrl('/compare/zipora-vs-removebg/')}): Image tools and availability; Zipora’s standalone background remover runs locally.`,
     `- [Zipora Blog](${absoluteUrl('/blog/')}): Dated comparisons citing official sources; original fact-check date ${checkedDate}. Prices and service terms can change.`,
+    `- [${removeBgArticle.heading}](${absoluteUrl(removeBgArticle.path)}): ${removeBgArticle.summary}`,
     ...blogPosts.map(p => `- [${p.h1}](${absoluteUrl(`/blog/${p.slug}/`)}): ${p.summary}`), '',
     '## Scope and limitations',
     'PDF tools include merge, split, rotation, watermarking, page numbering, password protection, compression, JPG/PNG-to-PDF and PDF-page-to-image conversion. Image tools cover compression, cropping, rotation, resizing, JPG/PNG, WebP and HEIC conversion and portrait framing. The QR generator exports static PNG or SVG codes; it does not provide scan analytics or editable redirects.',

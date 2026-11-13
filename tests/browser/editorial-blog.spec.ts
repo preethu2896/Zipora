@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {blogPosts,blogPaths} from '../../src/lib/blog';
 import {absoluteUrl} from '../../src/lib/site-url';
+import {removeBgArticle} from '../../src/lib/remove-bg-article';
 
 test('contact guidance and current privacy disclosures are visible',async({page})=>{
  await page.goto('/contact/');
@@ -27,16 +28,20 @@ test('existing comparisons show updated facts and relevant calls to action',asyn
  await page.goto('/compare/zipora-vs-removebg/');
  await expect(page.locator('table')).not.toContainText('Check on their site');
  await expect(page.locator('.intro')).toContainText('1 December 2026 at 9:00am CET');
- await expect(page.locator('.comparison-actions a')).toHaveText(['Try Image Compressor — Free','Try Resize Image — Free']);
+ await expect(page.locator('.review-date')).toContainText('13 November 2026');
+ await expect(page.locator('.comparison-actions a')).toHaveText(['Try Image Compressor — Free','Try Resize Image — Free','Try Remove Background — Free']);
  await expect(page.locator('.comparison-actions a').first()).toHaveAttribute('href','/image-compressor/');
- await expect(page.locator('.comparison-actions a').last()).toHaveAttribute('href','/resize-image/');
+ await expect(page.getByRole('link',{name:'Try Resize Image — Free'})).toHaveAttribute('href','/resize-image/');
+ await expect(page.getByRole('link',{name:'Try Remove Background — Free'})).toHaveAttribute('href','/remove-background/');
+ await expect(page.locator('main')).not.toContainText(/rather than waiting for Zipora|until Zipora’s separate background remover is released/);
 });
 
-test('twelve blog cards and ten distinct articles export with schema, sources and correct tools',async({page,request})=>{
+test('the blog index and comparison articles export with schema, sources and correct tools',async({page,request})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto('/blog/');
  await expect(page.locator('h1')).toHaveText('Zipora Blog');
- await expect(page.locator('.blog-card')).toHaveCount(12);
+ await expect(page.locator('.blog-card')).toHaveCount(13);
+ await expect(page.locator(`.blog-card[href="${removeBgArticle.path}"] time`)).toHaveText('Checked 13 November 2026');
  await expect(page.locator('.blog-card[href^="/compare/"]')).toHaveCount(2);
  await expect(page.locator('header nav a[href="/blog/"]')).toHaveCount(1);
  await expect(page.locator('footer a[href="/blog/"]')).toHaveCount(1);
@@ -60,6 +65,22 @@ test('twelve blog cards and ten distinct articles export with schema, sources an
   await expect(page.locator('.footer-tools a')).toHaveCount(40);
  }
  await page.screenshot({path:'research/blog-article-mobile.png',fullPage:true});
+});
+
+test('the remove.bg closing guide and its companion comparisons link to the live tool route', async ({page}) => {
+ await page.goto(removeBgArticle.path);
+ await expect(page.getByRole('heading', {level:1})).toHaveText(removeBgArticle.heading);
+ await expect(page.locator('.review-date')).toContainText('Facts checked 13 November 2026');
+ await expect(page.locator('.comparison-actions a')).toHaveCount(1);
+ await expect(page.getByRole('link', {name:'Try Remove Background — Free'})).toHaveAttribute('href','/remove-background/');
+ await expect(page.locator('.faqs details')).toHaveCount(5);
+ await expect(page.locator('main a[href^="https://"]')).toHaveCount(1);
+ await expect(page.locator('.sources a')).toHaveAttribute('href', removeBgArticle.source);
+ for (const slug of ['zipora-vs-canva-background-remover','zipora-vs-photoroom']) {
+  await page.goto(`/blog/${slug}/`);
+  await expect(page.locator('main')).not.toContainText(/coming soon|not yet available/i);
+  await expect(page.locator('.availability-note a')).toHaveAttribute('href','/remove-background/');
+ }
 });
 
 test('sitemap, bot rules and llms include all blog routes',async({request})=>{
