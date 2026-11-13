@@ -95,3 +95,14 @@ Gemini Watermark Remover browser engine (MIT)
 https://github.com/GargantuaX/gemini-watermark-remover
 License: /gemini-runtime/LICENSE
 Runtime third-party notices: /gemini-runtime/onnxruntime/ThirdPartyNotices.txt
+
+U²-Netp by Xuebin Qin et al. (Apache License 2.0)
+https://github.com/xuebinqin/U-2-Net
+ONNX checkpoint: https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2netp.onnx
+SHA-256: 309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8
+License: /models/u2netp/LICENSE
+
+ONNX Runtime Web (MIT)
+https://github.com/microsoft/onnxruntime
+License: /models/onnxruntime/LICENSE
+Third-party notices: /models/onnxruntime/ThirdPartyNotices.txt

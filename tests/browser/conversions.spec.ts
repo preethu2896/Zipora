@@ -180,12 +180,12 @@ test('new tools reject damaged, unsupported, and locked files', async ({ page })
 test('all five tools are discoverable and new workspaces fit 390px screens', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await expect(page.locator('.home-tool-list .tool-link')).toHaveCount(39);
+  await expect(page.locator('.home-tool-list .tool-link')).toHaveCount(40);
   for (const route of ['/compress-pdf/', '/jpg-to-pdf/', '/pdf-to-jpg/']) {
     await page.goto(route);
     await expect(page.locator('.upload-button')).toBeEnabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator('.footer-tools a')).toHaveCount(39);
+    await expect(page.locator('.footer-tools a')).toHaveCount(40);
     await page.screenshot({ path: `research/${route.split('/')[1]}-mobile.png`, fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });

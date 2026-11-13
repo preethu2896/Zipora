@@ -1,5 +1,6 @@
 import { extraTools } from './extra-tools';
 export const tools = [
+  { href: '/remove-background/', name: 'Remove Background', description: 'Make an image background transparent.' },
   { href: '/gemini-watermark-remover/', name: 'Gemini Image Watermark Remover', description: 'Clean supported Gemini image marks.' },
   { href: '/gemini-video-watermark-remover/', name: 'Gemini Video Watermark Remover', description: 'Clean supported Gemini video marks.' },
   { href: '/merge-pdf/', name: 'Merge PDF', description: 'Arrange your documents. Save them as one.' },

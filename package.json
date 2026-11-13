@@ -8,8 +8,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
-    "predev": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs",
-    "prebuild": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs"
+    "predev": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs && node scripts/copy-background-runtime.mjs",
+    "prebuild": "node scripts/copy-pdfjs.mjs && node scripts/copy-qpdf.mjs && node scripts/copy-heic.mjs && node scripts/copy-gemini-runtime.mjs && node scripts/copy-background-runtime.mjs"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.2.2",
@@ -20,6 +20,7 @@
     "jszip": "^3.10.1",
     "lucide-react": "^0.468.0",
     "next": "^16.0.0",
+    "onnxruntime-web": "1.31.1",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^5.4.624",
     "qrcode": "^1.5.4",

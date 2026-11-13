@@ -18,3 +18,4 @@ playwright-report/
 /public/qpdf/
 /public/heic/
 /public/gemini-runtime/
+/public/background-runtime/

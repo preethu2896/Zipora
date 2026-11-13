@@ -20,6 +20,13 @@ export const toolMeasurements: Partial<Record<string, string>> = {
 };
 
 export const toolGuidance: Record<string, ToolGuidance> = {
+  "remove-background": {
+    title: "Remove Background Online – Free Transparent PNG",
+    description: "Remove an image background with local AI and download a transparent PNG. Works with JPG, PNG and WebP without uploading your image.",
+    heading: "Make a product cutout for a new background",
+    example: "Start with a product photo that has a clear outline. Check the checkerboard preview around corners and edges before placing the PNG on a new background.",
+    related: ["crop-image", "resize-image", "image-compressor", "passport-photo-maker"],
+  },
   "gemini-watermark-remover": {
     title: "Gemini Image Watermark Remover – Local PNG Export",
     description: "Remove supported visible Gemini logos from PNG, JPG or WebP images. Compare the result and download a PNG in your browser.",
