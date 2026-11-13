@@ -23,8 +23,7 @@ test('Excel to PDF renders two worksheets with a print area and landscape setup'
   const picker = page.getByLabel('Choose Excel workbook', { exact: true });
   const convert = page.getByRole('button', { name: 'Convert to PDF', exact: true });
   await picker.setInputFiles({ name: 'invalid.xlsx', mimeType, buffer: Buffer.from('invalid workbook') });
-  await convert.click();
-  await expect(page.getByRole('region', { name: 'Excel to PDF workspace' }).getByRole('alert')).toContainText('Could not convert this workbook.');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a supported format');
   await picker.setInputFiles({ name: 'report.xlsx', mimeType, buffer: await workbook.generateAsync({ type: 'nodebuffer' }) });
   await convert.click();
   await expect(page.getByRole('heading', { name: 'Your PDF is ready' })).toBeVisible({ timeout: 15_000 });

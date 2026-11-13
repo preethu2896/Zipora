@@ -1,5 +1,6 @@
 'use client';
 
+import { checkArchiveLimits, safeDownloadName } from '@/lib/archive-safety';
 import { useEffect, useRef, useState } from 'react';
 import { ImageIcon, Trash2, Upload } from 'lucide-react';
 import { convertHeic, hasHeicHeader, maxHeicBatchBytes, maxHeicFileBytes, maxHeicFiles } from '@/lib/heic-conversion';
@@ -83,8 +84,9 @@ export function HeicToJpgTool() {
       let blob = first.blob;
       if (outputs.length > 1) {
         const { default: JSZip } = await import('jszip');
+        checkArchiveLimits(outputs.length, outputs.reduce((total, output) => total + output.blob.size, 0));
         const zip = new JSZip();
-        for (const output of outputs) zip.file(output.name, await output.blob.arrayBuffer());
+        for (const output of outputs) zip.file(safeDownloadName(output.name), await output.blob.arrayBuffer());
         blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/zip' });
       }
       if (mounted.current) setResult({ blob, name: outputs.length === 1 ? first.name : 'zipora-jpgs.zip', preview: first.blob, count: outputs.length, width: first.width, height: first.height });

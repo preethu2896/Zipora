@@ -1,3 +1,4 @@
+import { checkArchiveLimits, safeDownloadName } from '@/lib/archive-safety';
 import { PDFDocument } from 'pdf-lib';
 import { inspectPdf, type PdfSource } from './pdf';
 
@@ -149,9 +150,10 @@ export async function compressAsImages(source: PdfSource, quality: number, progr
   } finally { await document.destroy(); }
 }
 export async function zipImages(images: { blob: Blob; name: string }[]) {
+  checkArchiveLimits(images.length, images.reduce((total, image) => total + image.blob.size, 0));
   const { default: JSZip } = await import('jszip');
   const zip = new JSZip();
-  for (const image of images) zip.file(image.name, await image.blob.arrayBuffer());
+  for (const image of images) zip.file(safeDownloadName(image.name), await image.blob.arrayBuffer());
   return zip.generateAsync({ type: 'blob', compression: 'STORE' });
 }
 

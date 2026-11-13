@@ -1,3 +1,4 @@
+import { checkArchiveLimits, safeDownloadName } from '@/lib/archive-safety';
 import { PDFDocument } from 'pdf-lib';
 import { loadPdf, MAX_TOTAL_BYTES, type PdfSource } from './pdf';
 
@@ -101,7 +102,8 @@ export async function splitPdf(source: PdfSource, options: SplitOptions, progres
 }
 export async function zipSplitParts(parts: SplitPart[], names: string[]) {
   const { default: JSZip } = await import('jszip');
+  checkArchiveLimits(parts.length, parts.reduce((total, part) => total + part.bytes.length, 0));
   const zip = new JSZip();
-  parts.forEach((part, index) => zip.file(names[index], part.bytes));
+  parts.forEach((part, index) => zip.file(safeDownloadName(names[index]), part.bytes));
   return zip.generateAsync({ type: 'blob', compression: 'STORE' });
 }

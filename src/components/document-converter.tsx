@@ -45,7 +45,7 @@ const modes = {
     hint: 'One PDF up to 20 MB', accept: '.pdf,application/pdf', extension: /\.pdf$/i,
     invalid: 'Choose a .pdf file.', singular: 'PDF', action: 'Convert to Excel', ready: 'Your workbook is ready',
     output: 'XLSX', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    details: 'Each page with selectable text becomes a worksheet. Image-only scans need OCR first.',
+    details: 'Rows from all pages with selectable text appear in PDF order. Image-only scans need OCR first.',
     createWorker: () => new Worker(new URL('../lib/pdf-to-excel.worker.ts', import.meta.url), { type: 'module' }),
   },
 } as const;
@@ -56,6 +56,7 @@ export function DocumentConverter({ mode }: { mode: keyof typeof modes }) {
   const config = modes[mode];
   const picker = useRef<HTMLInputElement>(null);
   const worker = useRef<Worker | null>(null);
+  const timeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [ready, setReady] = useState(false);
   const [file, setFile] = useState<File>();
   const [dragging, setDragging] = useState(false);
@@ -69,6 +70,7 @@ export function DocumentConverter({ mode }: { mode: keyof typeof modes }) {
   useEffect(() => {
     setReady(true);
     return () => {
+      clearTimeout(timeout.current);
       worker.current?.terminate();
       worker.current = null;
     };
@@ -90,6 +92,7 @@ export function DocumentConverter({ mode }: { mode: keyof typeof modes }) {
   }
 
   function stop() {
+    clearTimeout(timeout.current);
     worker.current?.terminate();
     worker.current = null;
     setBusy(false);
@@ -121,6 +124,7 @@ export function DocumentConverter({ mode }: { mode: keyof typeof modes }) {
     job.onmessage = ({ data }) => finish(data);
     job.onmessageerror = () => finish(engineError);
     job.onerror = event => { event.preventDefault(); finish(engineError); };
+    timeout.current = setTimeout(() => finish({ error: 'Conversion took too long. Try a smaller document.' }), 60_000);
     job.postMessage(file);
   }
 

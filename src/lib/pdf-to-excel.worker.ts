@@ -92,7 +92,8 @@ self.onmessage = async ({ data: file }: MessageEvent<File>) => {
     });
     const pdf = await loading.promise;
     const archive = new JSZip();
-    const sheets: number[] = [];
+    const data: string[] = [];
+    let pagesWithText = 0;
     for (let number = 1; number <= pdf.numPages; number++) {
       const page = await pdf.getPage(number);
       const viewport = page.getViewport({ scale: 1 });
@@ -104,22 +105,29 @@ self.onmessage = async ({ data: file }: MessageEvent<File>) => {
       });
       page.cleanup();
       if (!fragments.length) continue;
-      sheets.push(number);
+      pagesWithText++;
       const rows = inferRows(fragments);
-      const data = rows.map((row, index) => `<row r="${index + 1}">${row.sort((a, b) => a.index - b.index)
-        .map(cell => cellXml(cell.text, columnName(cell.index) + (index + 1))).join('')}</row>`).join('');
-      archive.file(`xl/worksheets/sheet${number}.xml`, `<worksheet xmlns="${spreadsheet}"><sheetData>${data}</sheetData></worksheet>`);
+      for (const row of rows) {
+        const index = data.length + 1;
+        if (index > 1_048_576 || row.some(cell => cell.index >= 16_384)) {
+          self.postMessage({ error: 'This PDF exceeds Excel’s sheet limits. Split the PDF and try again.' });
+          return;
+        }
+        data.push(`<row r="${index}">${row.sort((a, b) => a.index - b.index)
+          .map(cell => cellXml(cell.text, columnName(cell.index) + index)).join('')}</row>`);
+      }
     }
-    if (!sheets.length) {
+    if (!pagesWithText) {
       self.postMessage({ error: 'No selectable text found. Scanned pages need OCR before conversion.' });
       return;
     }
-    archive.file('[Content_Types].xml', `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${sheets.map(n => `<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`);
+    archive.file('[Content_Types].xml', `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>`);
     archive.file('_rels/.rels', `<Relationships xmlns="${packageRelationship}"><Relationship Id="rId1" Type="${relationship}/officeDocument" Target="xl/workbook.xml"/></Relationships>`);
-    archive.file('xl/workbook.xml', `<workbook xmlns="${spreadsheet}" xmlns:r="${relationship}"><sheets>${sheets.map(n => `<sheet name="Page ${n}" sheetId="${n}" r:id="rId${n}"/>`).join('')}</sheets></workbook>`);
-    archive.file('xl/_rels/workbook.xml.rels', `<Relationships xmlns="${packageRelationship}">${sheets.map(n => `<Relationship Id="rId${n}" Type="${relationship}/worksheet" Target="worksheets/sheet${n}.xml"/>`).join('')}</Relationships>`);
+    archive.file('xl/workbook.xml', `<workbook xmlns="${spreadsheet}" xmlns:r="${relationship}"><sheets><sheet name="PDF data" sheetId="1" r:id="rId1"/></sheets></workbook>`);
+    archive.file('xl/_rels/workbook.xml.rels', `<Relationships xmlns="${packageRelationship}"><Relationship Id="rId1" Type="${relationship}/worksheet" Target="worksheets/sheet1.xml"/></Relationships>`);
+    archive.file('xl/worksheets/sheet1.xml', `<worksheet xmlns="${spreadsheet}"><sheetData>${data.join('')}</sheetData></worksheet>`);
     const bytes = await archive.generateAsync({ type: 'arraybuffer', compression: 'DEFLATE' });
-    const notice = sheets.length < pdf.numPages
+    const notice = pagesWithText < pdf.numPages
       ? 'Pages without selectable text were skipped. Check the inferred columns in Excel.'
       : 'Check the inferred rows and columns in Excel before using the data.';
     self.postMessage({ bytes, notice }, { transfer: [bytes] });

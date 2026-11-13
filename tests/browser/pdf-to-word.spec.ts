@@ -21,8 +21,7 @@ test('PDF to Word explains scans and downloads editable DOCX text', async ({ pag
   const workspace = page.getByRole('region', { name: 'PDF to Word workspace' });
 
   await picker.setInputFiles({ name: 'invalid.pdf', mimeType: 'application/pdf', buffer: Buffer.from('not a PDF') });
-  await convert.click();
-  await expect(workspace.getByRole('alert')).toHaveText('Choose a valid PDF file.');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toHaveText('This file is not a valid PDF, please upload a PDF file.');
   await picker.setInputFiles({ name: 'scan.pdf', mimeType: 'application/pdf', buffer: Buffer.from(await scan.save()) });
   await convert.click();
   await expect(workspace.getByRole('alert')).toContainText('Scanned pages need OCR', { timeout: 15_000 });

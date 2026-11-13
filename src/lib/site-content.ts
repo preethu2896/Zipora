@@ -5,9 +5,9 @@ export type ToolInfo={slug:string;name:string;group:'PDF Tools'|'Image Tools'|'O
 type Detail={steps:[string,string][];facts:[string,string,string];questions:[string,string,string]};
 const details:Record<string,Detail>={
  'pdf-to-excel':{
-  steps:[['Select a PDF','Choose or drop one PDF with selectable text, up to 20 MB.'],['Convert to Excel','Zipora uses text positions to infer rows and columns. Each page with text becomes a worksheet.'],['Download the XLSX','Open the workbook in Excel and check the inferred columns and values.']],
+  steps:[['Select a PDF','Choose or drop one PDF with selectable text, up to 20 MB.'],['Convert to Excel','Zipora uses text positions to infer rows and columns. All pages with text are included in PDF order.'],['Download the XLSX','Open the workbook in Excel and check the inferred columns and values.']],
   questions:['Can I convert a scanned PDF to Excel?','How are multiple PDF pages handled?','Will the workbook include formulas and exact formatting?'],
-  facts:['Image-only scans need optical character recognition (OCR) first. Try selecting a table cell in your PDF reader to check for a text layer.','Each page with selectable text gets a worksheet named after the original page number. Pages without selectable text are skipped.','The workbook contains editable values. Rows and columns are estimated from text placement, so check merged cells and irregular tables. The PDF does not supply the original spreadsheet formulas.'],
+  facts:['Image-only scans need optical character recognition (OCR) first. Try selecting a table cell in your PDF reader to check for a text layer.','Rows from all pages with selectable text appear in a single worksheet in PDF order. Pages without selectable text are skipped.','The workbook contains editable values. Rows and columns are estimated from text placement, so check merged cells and irregular tables. The PDF does not supply the original spreadsheet formulas.'],
  },
  'excel-to-pdf':{
   steps:[['Select a workbook','Choose or drop one .xlsx or .xls file up to 20 MB.'],['Convert to PDF','Zipora turns the workbook into printable pages in your browser.'],['Download and review','Check worksheet order, wide columns and page breaks in the downloaded PDF.']],
@@ -166,5 +166,5 @@ export const siteTools:ToolInfo[]=existingTools.map(tool=>{
 });
 export function toolInfo(slug:string){const match=siteTools.find(t=>t.slug===(slug==='image-resizer'?'resize-image':slug));if(!match)throw new Error(`Unknown tool: ${slug}`);return match;}
 export const comparisonPaths=['/compare/zipora-vs-ilovepdf/','/compare/zipora-vs-removebg/'];
-export const companyPaths=['/about/','/contact/','/privacy-policy/','/terms/'];
+export const companyPaths=['/about/','/contact/','/privacy-policy/','/terms/','/security-and-privacy/'];
 export const publicPaths=['/','/compare/',...siteTools.map(t=>`/${t.slug}/`),...comparisonPaths,...companyPaths];

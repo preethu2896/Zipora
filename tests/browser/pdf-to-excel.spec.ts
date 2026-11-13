@@ -40,16 +40,36 @@ test('PDF to Excel downloads numeric and text cells in editable worksheets', asy
   await download.saveAs(output);
   const workbook = await JSZip.loadAsync(await readFile(output));
   const index = await workbook.file('xl/workbook.xml')!.async('string');
-  expect(index).toContain('name="Page 1"');
-  expect(index).toContain('name="Page 3"');
-  expect(index).not.toContain('name="Page 2"');
+  expect(index).toContain('name="PDF data"');
   const rows = await workbook.file('xl/worksheets/sheet1.xml')!.async('string');
   expect(rows).toContain('<c r="A2" t="inlineStr"><is><t xml:space="preserve">Pencils</t>');
   expect(rows).toContain('<c r="B2"><v>125.50</v>');
   expect(rows).toContain('<c r="B3"><v>7</v>');
-  const third = await workbook.file('xl/worksheets/sheet3.xml')!.async('string');
+  const third = rows;
+  expect(rows).toContain('<c r="A4"');
   expect(third).toContain('>=1+1</t>');
   expect(third).not.toContain('<f>');
+  const twoPages = await PDFDocument.create();
+  const repro = [
+    ['Zipora Text PDF - Page 1', 'Hello Zipora', 'Name Age City', 'Asha 22 Bengaluru', 'Ravi 24 Mangaluru'],
+    ['Zipora Text PDF - Page 2', 'Second page of selectable text', 'Meera 21 Udupi'],
+  ];
+  for (const lines of repro) {
+    const sheet = twoPages.addPage();
+    lines.forEach((line, index) => sheet.drawText(line, { x: 72, y: 700 - index * 24, size: 12 }));
+  }
+  await picker.setInputFiles({ name: 'two-pages.pdf', mimeType: 'application/pdf', buffer: Buffer.from(await twoPages.save()) });
+  await convert.click();
+  const next = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download XLSX' }).click();
+  const twoPageWorkbook = await JSZip.loadAsync(await readFile((await (await next).path())!));
+  const combined = await twoPageWorkbook.file('xl/worksheets/sheet1.xml')!.async('string');
+  let previous = -1;
+  for (const line of repro.flat()) {
+    const position = combined.indexOf(line);
+    expect(position, line).toBeGreaterThan(previous);
+    previous = position;
+  }
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   expect(requests).toEqual([]);
 });

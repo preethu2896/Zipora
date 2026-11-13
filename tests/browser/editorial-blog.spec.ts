@@ -11,7 +11,9 @@ test('contact guidance and current privacy disclosures are visible',async({page}
  await expect(page.locator('.legal-section').filter({hasText:'When reporting an issue'}).locator('p')).toHaveText('Include the tool name, browser, device and the error message. Use a synthetic sample if possible. Do not attach identity documents, passwords, confidential PDFs or personal photos unless a suitable support process has been agreed.');
  await expect(page.locator('footer a[href="mailto:contact@zipora.online"]')).toBeVisible();
  await page.goto('/privacy-policy/');
- await expect(page.locator('main')).toContainText('Updated 11 November 2026');
+ await expect(page.locator('main')).toContainText('Updated 13 November 2026');
+ await expect(page.locator('main')).toContainText('Zipora sets no tracking cookies today.');
+ await expect(page.locator('main a[href="/security-and-privacy/"]')).toBeVisible();
  await expect(page.locator('main')).not.toContainText('Public contact details are pending');
  await expect(page.locator('.legal-section').filter({hasText:'Contact and changes'}).locator('a[href^="mailto:"]')).toHaveText('contact@zipora.online');
 });

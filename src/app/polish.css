@@ -70,6 +70,11 @@ body { font-family:"Segoe UI",Arial,sans-serif; font-size:16px; }
 .drop-zone h3 { font-size:24px; margin-top:8px; }
 .drop-zone>p { font-size:14px; }
 .drop-zone:hover,.drop-zone.is-dragging { background:#f3f6fc; }
+.drop-zone[data-file-drag] { position:relative; border-color:#2563eb; background:#e8f0ff; }
+.drop-zone[data-file-drag]::after { content:'Drop to start'; position:absolute; inset:0; display:grid; place-items:center; background:#e8f0ff; color:#173a85; font-weight:700; border-radius:inherit; pointer-events:none; }
+.tool-session-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-block:0 16px; font-size:.875rem; }
+.tool-session-controls > span { border:1px solid #d7dfe8; border-radius:999px; padding:4px 10px; }
+.tool-session-controls > p { flex-basis:100%; }
 .upload-hint,.status-line,.panel-privacy { font-size:13px; }
 .upload-button,.primary { font-size:15px; font-weight:500; border-radius:8px; }
 .document-preview { width:136px; height:176px; }

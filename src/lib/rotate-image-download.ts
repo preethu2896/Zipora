@@ -1,3 +1,4 @@
+import { checkArchiveLimits, safeDownloadName } from '@/lib/archive-safety';
 import type { ImageFormat } from './image-processing';
 
 const extensions = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
@@ -10,7 +11,8 @@ export function rotatedImageName(file: File, format: ImageFormat, angle: number,
 
 export async function rotateImagesZip(outputs: { blob: Blob; name: string }[]) {
   const { default: JSZip } = await import('jszip');
+  checkArchiveLimits(outputs.length, outputs.reduce((total, output) => total + output.blob.size, 0));
   const zip = new JSZip();
-  for (const output of outputs) zip.file(output.name, await output.blob.arrayBuffer());
+  for (const output of outputs) zip.file(safeDownloadName(output.name), await output.blob.arrayBuffer());
   return zip.generateAsync({ type: 'blob', mimeType: 'application/zip' });
 }

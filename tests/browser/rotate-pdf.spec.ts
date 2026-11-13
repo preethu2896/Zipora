@@ -17,7 +17,7 @@ test('Rotate PDF previews and saves individual and whole-document turns locally'
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Rotate PDF Online Free');
   await expect(page.getByRole('button', { name: 'Select PDF' })).toBeEnabled();
   await page.getByLabel('Choose PDF').setInputFiles({ name: 'invalid.pdf', mimeType: 'application/pdf', buffer: Buffer.from('invalid') });
-  await expect(page.getByRole('region', { name: 'Rotate PDF workspace' }).getByRole('alert')).toContainText('could not be read');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a valid PDF');
   await page.getByLabel('Choose PDF').setInputFiles({ name: 'sample.pdf', mimeType: 'application/pdf', buffer: bytes });
   const preview = page.getByRole('img', { name: 'Preview of page 1' });
   await expect(preview).toBeVisible();

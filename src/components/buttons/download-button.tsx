@@ -1,5 +1,6 @@
 "use client";
 
+import { safeDownloadName } from '@/lib/archive-safety';
 import {
   forwardRef,
   useEffect,
@@ -89,7 +90,7 @@ export const DownloadButton = forwardRef<
         if (href) {
           const anchor = document.createElement("a");
           anchor.href = href;
-          if (download) anchor.download = download;
+          if (download) anchor.download = safeDownloadName(download);
           anchor.rel = "noopener";
           document.body.appendChild(anchor);
           anchor.click();

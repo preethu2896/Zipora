@@ -23,7 +23,7 @@ test('converts a real HEIC photo to a dimension-preserving JPG and packages a ba
   await page.goto('/heic-to-jpg/');
   await expect(page.getByRole('button', { name: 'Select photos' })).toBeEnabled();
   await page.getByLabel('Choose HEIC photos').setInputFiles({ name: 'invalid.heic', mimeType: 'image/heic', buffer: Buffer.from('invalid') });
-  await expect(page.locator('.tool-panel [role=alert]')).toContainText('not a supported HEIC');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a supported format');
   await page.getByLabel('Choose HEIC photos').setInputFiles(file('color-bars.heic'));
   const convert = page.getByRole('button', { name: 'Convert to JPG', exact: true });
   await expect(convert).toBeEnabled();

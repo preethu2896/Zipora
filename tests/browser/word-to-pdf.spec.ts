@@ -16,9 +16,7 @@ test('Word to PDF rejects invalid documents and downloads selectable text from a
   const picker = page.getByLabel('Choose Word document', { exact: true });
   const convert = page.getByRole('button', { name: 'Convert to PDF', exact: true });
   await picker.setInputFiles({ name: 'invalid.docx', mimeType, buffer: Buffer.from('not a Word document') });
-  await convert.click();
-  const workspace = page.getByRole('region', { name: 'Word to PDF workspace' });
-  await expect(workspace.getByRole('alert')).toContainText('Could not convert this document.');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a supported format');
   await expect(page.getByRole('button', { name: 'Download PDF' })).toHaveCount(0);
   await picker.setInputFiles({ name: 'sample.docx', mimeType, buffer: await fixture.generateAsync({ type: 'nodebuffer' }) });
   await convert.click();

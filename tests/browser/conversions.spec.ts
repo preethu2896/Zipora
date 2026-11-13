@@ -167,14 +167,14 @@ test('new tools reject damaged, unsupported, and locked files', async ({ page })
     await page.getByLabel('Choose PDF', { exact: true }).setInputFiles('tests/fixtures/locked.pdf');
     await expect(page.locator('.error-message')).toContainText('password-protected');
     await page.getByLabel('Choose PDF', { exact: true }).setInputFiles({ name: 'broken.pdf', mimeType: 'application/pdf', buffer: Buffer.from('bad') });
-    await expect(page.locator('.error-message')).toContainText('could not be read');
+    await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a valid PDF');
   }
   await page.goto('/jpg-to-pdf/');
   await expect(page.locator('.upload-button')).toBeEnabled();
   await page.getByLabel('Choose images', { exact: true }).setInputFiles({ name: 'broken.jpg', mimeType: 'image/jpeg', buffer: Buffer.from('bad') });
-  await expect(page.locator('.error-message')).toContainText('could not be read');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a supported format');
   await page.getByLabel('Choose images', { exact: true }).setInputFiles({ name: 'picture.webp', mimeType: 'image/webp', buffer: Buffer.from('bad') });
-  await expect(page.locator('.error-message')).toContainText('not supported');
+  await expect(page.locator('.tool-session-controls [role=alert]')).toContainText('not a supported format');
 });
 
 test('all five tools are discoverable and new workspaces fit 390px screens', async ({ page }) => {
