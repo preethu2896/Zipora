@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/image-resizer/", "destination": "/resize-image/", "permanent": true },
+    { "source": "/image-resizer", "destination": "/resize-image/", "permanent": true },
+    { "source": "/pdf-compressor/", "destination": "/compress-pdf/", "permanent": true },
+    { "source": "/pdf-compressor", "destination": "/compress-pdf/", "permanent": true }
+  ]
+}

@@ -27,7 +27,7 @@ test('only image compressor loses the unrelated comparison box and note',async({
  await page.goto('/image-compressor/');await expect(page.locator('.small-compare')).toHaveCount(0);
  await expect(page.locator('main')).not.toContainText('The standalone Remove Background tool is Coming Soon.');
  await expect(page.locator('#how-it-works')).toBeVisible();await expect(page.locator('.related-tools')).toBeVisible();await expect(page.locator('.faq-section')).toBeVisible();
- await page.goto('/png-to-jpg/');await expect(page.locator('.small-compare')).toHaveCount(1);
+ await page.goto('/png-to-jpg/');await expect(page.locator('.small-compare')).toHaveCount(0);
 });
 
 test('a PNG-to-JPG result larger than its source is not offered either',async({page})=>{

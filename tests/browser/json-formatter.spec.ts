@@ -1,0 +1,32 @@
+import { readFile } from 'node:fs/promises';
+import { expect, test } from '@playwright/test';
+
+test('formats, validates and downloads JSON without changing number literals', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/json-formatter/');
+  const input = page.getByLabel('Input JSON');
+  const output = page.getByLabel('Output JSON');
+  await input.fill('{"broken":}');
+  await page.getByRole('button', { name: 'Validate JSON' }).click();
+  await expect(page.locator('.tool-panel [role=alert]')).toBeVisible();
+  const compact = '{"id":90071992547409931234,"id":1,"s":"a b","items":[{},[]]}';
+  await input.fill(compact);
+  await page.getByRole('button', { name: 'Validate JSON' }).click();
+  await expect(page.locator('.tool-panel [role=status]')).toHaveText('Valid JSON.');
+  await page.getByRole('combobox', { name: 'Indentation' }).selectOption('4');
+  await page.getByRole('button', { name: 'Format JSON' }).click();
+  await expect(output).toHaveValue('{\n    "id": 90071992547409931234,\n    "id": 1,\n    "s": "a b",\n    "items": [\n        {},\n        []\n    ]\n}');
+  await input.fill(await output.inputValue());
+  await page.getByRole('button', { name: 'Minify JSON' }).click();
+  await expect(output).toHaveValue(compact);
+  await page.getByRole('button', { name: 'Copy JSON' }).click();
+  await expect(page.locator('.tool-panel [role=status]')).toHaveText('Copied to clipboard.');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(compact);
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download JSON' }).click();
+  const file = await pending;
+  expect(file.suggestedFilename()).toBe('zipora.json');
+  expect(await readFile((await file.path())!, 'utf8')).toBe(compact);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});

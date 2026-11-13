@@ -2,16 +2,16 @@ import {test,expect} from '@playwright/test';
 import {blogPosts,blogPaths} from '../../src/lib/blog';
 import {absoluteUrl} from '../../src/lib/site-url';
 
-test('contact mail links and privacy date are live without changing issue guidance',async({page})=>{
+test('contact guidance and current privacy disclosures are visible',async({page})=>{
  await page.goto('/contact/');
  await expect(page.locator('main')).not.toContainText('coming soon');
  await expect(page.locator('.contact-address')).toHaveText('Contact email: contact@zipora.online');
  await expect(page.locator('.contact-message a')).toHaveAttribute('href','mailto:contact@zipora.online');
  await expect(page.locator('.contact-message')).toContainText('do not send private files, ID documents, passwords, or personal photos by email unless we ask for them');
- await expect(page.locator('.legal-section').filter({hasText:'When reporting an issue'}).locator('p')).toHaveText('When contact becomes available, include the tool name, browser, device and the error message. Use a synthetic sample if possible. Do not attach identity documents, passwords, confidential PDFs or personal photos unless a suitable support process has been agreed.');
+ await expect(page.locator('.legal-section').filter({hasText:'When reporting an issue'}).locator('p')).toHaveText('Include the tool name, browser, device and the error message. Use a synthetic sample if possible. Do not attach identity documents, passwords, confidential PDFs or personal photos unless a suitable support process has been agreed.');
  await expect(page.locator('footer a[href="mailto:contact@zipora.online"]')).toBeVisible();
  await page.goto('/privacy-policy/');
- await expect(page.locator('main')).toContainText('Updated 8 November 2026');
+ await expect(page.locator('main')).toContainText('Updated 11 November 2026');
  await expect(page.locator('main')).not.toContainText('Public contact details are pending');
  await expect(page.locator('.legal-section').filter({hasText:'Contact and changes'}).locator('a[href^="mailto:"]')).toHaveText('contact@zipora.online');
 });
@@ -44,20 +44,18 @@ test('twelve blog cards and ten distinct articles export with schema, sources an
   await page.goto(`/blog/${post.slug}/`);
   await expect(page.locator('h1')).toHaveText(post.h1);
   await expect(page.locator('table tbody tr')).toHaveCount(6);
-  await expect(page.locator('.faqs details')).toHaveCount(3);
+  await expect(page.locator('.faqs details')).toHaveCount(1);
   const links=await page.locator('.comparison-actions a').evaluateAll(a=>a.map(a=>a.getAttribute('href')));
   expect(links).toEqual(post.tools.map(s=>`/${s}/`));
   await expect(page.locator('.sources a')).toHaveCount(post.sources.length);
   for(const href of links)expect((await request.get(href!)).status()).toBe(200);
   const schemas=await page.locator('script[type="application/ld+json"]').evaluateAll(s=>s.map(s=>JSON.parse(s.textContent!)));
-  const article=schemas.find(s=>s['@type']==='Article'),faq=schemas.find(s=>s['@type']==='FAQPage');
-  expect(article.datePublished).toBe('2026-11-08');expect(article.dateModified).toBe('2026-11-08');
-  expect(faq.mainEntity).toHaveLength(3);
-  expect(await page.locator('.faqs details').evaluateAll(d=>d.map(d=>d.querySelector('p')!.textContent))).toEqual(faq.mainEntity.map((q:any)=>q.acceptedAnswer.text));
+  const article=schemas.find(s=>s['@type']==='Article');
+  expect(article.datePublished).toBe('2026-11-08');expect(article.dateModified).toBe('2026-11-11');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',absoluteUrl(`/blog/${post.slug}/`));
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),post.slug).toBeTruthy();
   await expect(page.locator('.ad-blog-table')).toHaveCount(1);await expect(page.locator('.ad-footer')).toHaveCount(1);
-  await expect(page.locator('.footer-tools a')).toHaveCount(19);
+  await expect(page.locator('.footer-tools a')).toHaveCount(37);
  }
  await page.screenshot({path:'research/blog-article-mobile.png',fullPage:true});
 });

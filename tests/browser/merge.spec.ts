@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { PDFDocument } from 'pdf-lib';
 import { readFile } from 'node:fs/promises';
+import { monitorFileRequests } from './file-requests';
 
 async function fixture(name: string, widths: number[]) {
   const doc = await PDFDocument.create();
@@ -12,8 +13,7 @@ test('merge, reorder, rename, download twice, and invalidate stale output', asyn
   await page.addInitScript(() => { Object.defineProperty(crypto, 'randomUUID', { value: undefined, configurable: true }); });
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  const posts: string[] = [];
-  page.on('request', request => { if (request.method() === 'POST') posts.push(request.url()); });
+  const posts = monitorFileRequests(page);
   await page.goto('/merge-pdf/');
   await expect(page.getByRole('button', { name: 'Select PDF files', exact: true })).toBeEnabled({timeout:15000});
   await expect(page.getByRole('button', { name: 'Merge PDFs', exact: true })).toBeDisabled();
@@ -109,7 +109,7 @@ test('encrypted PDFs are rejected with an unlock instruction', async ({ page }) 
 test('redesigned homepage and empty merger work on desktop and mobile', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'All your file tools in one place.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Free online PDF, image and QR tools' })).toBeVisible();
   await page.screenshot({ path: 'research/zipora-home-desktop.png', fullPage: true });
   await page.locator('.home-tool-list a[href="/merge-pdf/"]').click();
   await expect(page.getByRole('heading', { name: 'Merge PDF Online Free', exact: true })).toBeVisible();

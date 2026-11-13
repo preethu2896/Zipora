@@ -61,7 +61,7 @@ export async function optimizePdf(source: PdfSource, progress = (_percent: numbe
   return { bytes, pages: document.getPageCount(), originalSize: original.length, savedPercent: (1 - bytes.length / original.length) * 100, strategy: bytes === original ? 'original' as const : 'optimized' as const };
 }
 
-async function openRenderedPdf(source: PdfSource) {
+export async function openRenderedPdf(source: PdfSource) {
   const pdfjs = await import('pdfjs-dist');
   pdfjs.GlobalWorkerOptions.workerSrc = '/pdfjs/pdf.worker.min.mjs';
   const task = pdfjs.getDocument({ data: new Uint8Array(await source.arrayBuffer()), standardFontDataUrl: '/pdfjs/standard_fonts/', cMapUrl: '/pdfjs/cmaps/', cMapPacked: true, wasmUrl: '/pdfjs/wasm/', isEvalSupported: false });
@@ -72,15 +72,16 @@ async function openRenderedPdf(source: PdfSource) {
     throw new Error('Could not render this PDF. Check that it is valid and unlocked.');
   }
 }
-async function renderPage(document: Awaited<ReturnType<typeof openRenderedPdf>>, pageNumber: number, scale: number, quality: number, format = 'image/jpeg', minimumDpi = 0) {
+async function renderPage(document: Awaited<ReturnType<typeof openRenderedPdf>>, pageNumber: number, scale: number, quality: number, format = 'image/jpeg', minimumDpi = 0, rotationDelta = 0) {
   const page = await document.getPage(pageNumber);
-  const native = page.getViewport({ scale: 1 });
+  const rotation = (page.rotate + rotationDelta + 360) % 360;
+  const native = page.getViewport({ scale: 1, rotation });
   const boundedScale = Math.min(scale, Math.sqrt(MAX_RENDER_PIXELS / (native.width * native.height)), 8192 / Math.max(native.width, native.height));
   if (minimumDpi && boundedScale * 72 < minimumDpi - .001) {
     page.cleanup();
     throw new Error(`This page exceeds browser rendering limits at ${minimumDpi} DPI. Use text-preserving compression or smaller page dimensions.`);
   }
-  const viewport = page.getViewport({ scale: boundedScale });
+  const viewport = page.getViewport({ scale: boundedScale, rotation });
   const canvas = window.document.createElement('canvas');
   canvas.width = Math.max(1, minimumDpi ? Math.ceil(viewport.width) : Math.round(viewport.width));
   canvas.height = Math.max(1, minimumDpi ? Math.ceil(viewport.height) : Math.round(viewport.height));
@@ -91,6 +92,11 @@ async function renderPage(document: Awaited<ReturnType<typeof openRenderedPdf>>,
     const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Could not create an image. Try a smaller PDF.')), format, quality));
     return { blob, width: canvas.width, height: canvas.height, pageWidth: native.width, pageHeight: native.height };
   } finally { canvas.width = 0; canvas.height = 0; page.cleanup(); }
+}
+export async function renderRotationPreview(document: Awaited<ReturnType<typeof openRenderedPdf>>, pageNumber: number, rotationDelta: number) {
+  const page = await document.getPage(pageNumber);
+  const { width, height } = page.getViewport({ scale: 1 });
+  return renderPage(document, pageNumber, 480 / Math.max(width, height), 0.85, 'image/jpeg', 0, rotationDelta);
 }
 export async function pdfToJpg(source: PdfSource, options: { scale: number; quality: number; format?: 'image/png' | 'image/jpeg' }, progress = (_percent: number) => {}) {
   const document = await openRenderedPdf(source);

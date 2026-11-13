@@ -1,0 +1,38 @@
+import { readFile } from 'node:fs/promises';
+import { expect, test } from '@playwright/test';
+
+test('generates standard UUID v4 IDs, validates batch size, and copies and downloads the batch', async ({ page, context }) => {
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/uuid-generator/');
+  const generate = page.getByRole('button', { name: 'Generate UUIDs' });
+  const output = page.getByRole('textbox', { name: 'Generated UUIDs' });
+  await generate.click();
+  await expect(output).toHaveValue(uuid);
+  const first = await output.inputValue();
+  await generate.click();
+  await expect(output).not.toHaveValue(first);
+  await page.getByLabel('Quantity').fill('1001');
+  await generate.click();
+  await expect(page.locator('.tool-panel [role=alert]')).toContainText('whole number');
+  await expect(output).toHaveCount(0);
+  await page.getByLabel('Quantity').fill('1000');
+  await generate.click();
+  await expect(page.locator('.tool-panel [role=status]')).toHaveText('1,000 UUIDs generated.');
+  const text = await output.inputValue();
+  const ids = text.split('\n');
+  expect(ids).toHaveLength(1000);
+  expect(new Set(ids).size).toBe(1000);
+  expect(ids.every(id => uuid.test(id))).toBe(true);
+  await page.getByRole('button', { name: 'Copy UUIDs' }).click();
+  await expect(page.locator('.tool-panel [role=status]')).toHaveText('Copied to clipboard.');
+  const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboard.replace(/\r\n/g, '\n') === text).toBe(true);
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download TXT' }).click();
+  const file = await pending;
+  expect(file.suggestedFilename()).toBe('zipora-uuids.txt');
+  expect(await readFile((await file.path())!, 'utf8')).toBe(text + '\n');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});

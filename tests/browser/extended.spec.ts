@@ -44,7 +44,11 @@ test('PDF PNG export keeps every page and one-page PDFs download directly',async
 });
 test('PDF presets report actual target status, preserve page count, and disclose unattainable limits',async({page})=>{
   for(const target of [100,200,500]){await choose(page,`/compress-pdf-to-${target}kb/`,await pdf());await page.getByRole('button',{name:'Compress',exact:true}).click();await expect(page.locator('.extra-result')).toContainText('Target reached');const out=await download(page,'Download PDF');expect(out.bytes.length).toBeLessThanOrEqual(target*1024);expect((await PDFDocument.load(out.bytes)).getPageCount()).toBe(2);}
-  await choose(page,'/compress-pdf-to-100kb/',await pdf(10));await page.getByLabel('Target size (KB)',{exact:true}).fill('1');await page.getByRole('button',{name:'Compress',exact:true}).click();await expect(page.locator('.extra-result')).toContainText('Target not reached');
+  await choose(page, '/compress-pdf-to-100kb/', await pdf(10));
+  await page.getByLabel('Target size (KB)', { exact: true }).fill('1');
+  await page.getByRole('button', { name: 'Compress', exact: true }).click();
+  await page.locator('.tool-panel[aria-busy="false"]').waitFor();
+  await expect(page.locator('.extra-result')).toContainText('Target not reached');
 });
 test('passport crop and print sheet have exact physical pixel sizes and density metadata',async({page})=>{
   await choose(page,'/passport-photo-maker/','tests/fixtures/red.jpg');await page.getByRole('button',{name:'Create photo',exact:true}).click();await expect(page.getByRole('heading',{name:'Ready to save'})).toBeVisible();let p=await pixels(page);expect([p.width,p.height]).toEqual([413,531]);let out=await download(page,'Download image');expect([...out.bytes.slice(13,18)]).toEqual([1,1,44,1,44]);await page.getByLabel('Photo size').selectOption('50.8x50.8');await page.getByLabel('Create a 4 × 6 inch print sheet at 300 DPI').check();await page.getByRole('button',{name:'Create photo',exact:true}).click();await expect(page.getByRole('heading',{name:'Ready to save'})).toBeVisible();p=await pixels(page);expect([p.width,p.height]).toEqual([1200,1800]);
@@ -69,10 +73,10 @@ test('portrait segmentation replaces the background, restores original and expor
 });
 
 test('hero search filters the grouped tools and clears after choosing a tool',async({page})=>{
- await page.goto('/');await expect(page.locator('.home-tool-list a')).toHaveCount(19);await expect(page.locator('.site-header input')).toHaveCount(0);
+ await page.goto('/');await expect(page.locator('.home-tool-list a')).toHaveCount(37);await expect(page.locator('.site-header input')).toHaveCount(0);
  await page.getByLabel('Search tools in hero').fill('passport');await expect(page.locator('.home-tool-list a')).toHaveCount(1);
  await page.getByLabel('Search tools in hero').fill('nonexistent');await expect(page.getByRole('status')).toContainText('0 tools found');
- await page.getByLabel('Search tools in hero').fill('');await expect(page.locator('.home-tool-list a')).toHaveCount(19);
+ await page.getByLabel('Search tools in hero').fill('');await expect(page.locator('.home-tool-list a')).toHaveCount(37);
  await page.getByLabel('Search tools in hero').fill('merge');await page.locator('.home-tool-list a[href="/merge-pdf/"]').click();await expect(page.locator('.site-header input')).toHaveCount(0);
 });
 test('transparent PNG conversion uses an actual white JPG matte',async({page})=>{

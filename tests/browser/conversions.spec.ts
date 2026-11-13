@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import JSZip from 'jszip';
 import { readFile } from 'node:fs/promises';
+import { monitorFileRequests } from './file-requests';
 
 async function pdfFixture(name = 'document.pdf', pages = 2) {
   const document = await PDFDocument.create();
@@ -26,6 +27,11 @@ async function downloadBytes(page: Page, name: string) {
   await page.getByRole('button', { name, exact: true }).click();
   const download = await pending;
   return { name: download.suggestedFilename(), bytes: await readFile((await download.path())!) };
+}
+
+async function processFile(page: Page, action: string) {
+  await page.getByRole('button', { name: action, exact: true }).click();
+  await page.locator('.tool-panel[aria-busy="false"]').waitFor();
 }
 
 test('JPG/PNG to PDF supports ordered pages, options, real download, and stale-result removal', async ({ page }) => {
@@ -57,7 +63,7 @@ test('PDF optimization reports real savings and preserves actual pages', async (
   await choose(page, '/compress-pdf/', fixture);
   await expect(page.getByRole('combobox', { name: 'Compression method', exact: true })).toHaveValue('balanced');
   await page.getByRole('combobox', { name: 'Compression method', exact: true }).selectOption('optimize');
-  await page.getByRole('button', { name: 'Compress PDF', exact: true }).click();
+  await processFile(page, 'Compress PDF');
   await expect(page.getByRole('heading', { name: 'Your PDF is ready', exact: true })).toBeVisible();
   const output = await downloadBytes(page, 'Download PDF');
   expect(output.bytes.length).toBeLessThan(fixture.buffer.length);
@@ -65,7 +71,7 @@ test('PDF optimization reports real savings and preserves actual pages', async (
   await page.getByRole('combobox', { name: 'Compression method', exact: true }).selectOption('strong');
   await expect(page.getByRole('button', { name: 'Download PDF', exact: true })).toHaveCount(0);
   await expect(page.locator('.option-warning')).toContainText('smallest result');
-  await page.getByRole('button', { name: 'Compress PDF', exact: true }).click();
+  await processFile(page, 'Compress PDF');
   await expect(page.getByRole('heading', { name: 'Your PDF is ready', exact: true })).toBeVisible();
   const raster = await downloadBytes(page, 'Download PDF');
   const result = await PDFDocument.load(raster.bytes);
@@ -75,13 +81,12 @@ test('PDF optimization reports real savings and preserves actual pages', async (
 });
 
 test('PDF pages render as genuine JPGs and a complete numbered ZIP with no uploads', async ({ page }) => {
-  const uploads: string[] = [];
+  const uploads = monitorFileRequests(page);
   const errors: string[] = [];
-  page.on('request', request => { if (request.method() === 'POST') uploads.push(request.url()); });
   page.on('pageerror', error => errors.push(error.message));
   await choose(page, '/pdf-to-jpg/', await pdfFixture());
   await page.getByRole('combobox', { name: 'Resolution', exact: true }).selectOption('1');
-  await page.getByRole('button', { name: 'Convert to JPG', exact: true }).click();
+  await processFile(page, 'Convert to JPG');
   await expect(page.getByRole('heading', { name: 'Your JPGs are ready' })).toBeVisible();
   await expect(page.locator('.jpg-result')).toHaveCount(2);
   await expect(page.locator('[data-slot="download-button"]')).toHaveCount(3);
@@ -103,7 +108,7 @@ test('PDF pages render as genuine JPGs and a complete numbered ZIP with no uploa
 test('one-page PDF to JPG offers only one direct JPG download', async ({ page }) => {
   await choose(page, '/pdf-to-jpg/', await pdfFixture('cover.pdf', 1));
   await page.getByLabel('Output filename').fill('cover');
-  await page.getByRole('button', { name: 'Convert to JPG', exact: true }).click();
+  await processFile(page, 'Convert to JPG');
   await expect(page.getByRole('heading', { name: 'Your JPGs are ready' })).toBeVisible();
   await expect(page.locator('[data-slot="download-button"]')).toHaveCount(1);
   const output = await downloadBytes(page, 'Download JPG');
@@ -175,12 +180,12 @@ test('new tools reject damaged, unsupported, and locked files', async ({ page })
 test('all five tools are discoverable and new workspaces fit 390px screens', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await expect(page.locator('.home-tool-list .tool-link')).toHaveCount(19);
+  await expect(page.locator('.home-tool-list .tool-link')).toHaveCount(37);
   for (const route of ['/compress-pdf/', '/jpg-to-pdf/', '/pdf-to-jpg/']) {
     await page.goto(route);
     await expect(page.locator('.upload-button')).toBeEnabled();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    await expect(page.locator('.footer-tools a')).toHaveCount(19);
+    await expect(page.locator('.footer-tools a')).toHaveCount(37);
     await page.screenshot({ path: `research/${route.split('/')[1]}-mobile.png`, fullPage: true });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
