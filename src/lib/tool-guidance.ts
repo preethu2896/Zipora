@@ -20,6 +20,13 @@ export const toolMeasurements: Partial<Record<string, string>> = {
 };
 
 export const toolGuidance: Record<string, ToolGuidance> = {
+  "video-compressor": {
+    title: "Video Compressor Online – Reduce Video Size to MP4",
+    description: "Compress MP4, WebM or MOV videos in your browser. Compare file sizes, preview the result and download a smaller MP4 without uploading your clip.",
+    heading: "Make a clip easier to share",
+    example: "Start with Balanced for a short clip. If the attachment is still too large, try Smaller file and check that faces and text remain clear at playback size.",
+    related: ["gemini-video-watermark-remover", "image-compressor"],
+  },
   "remove-background": {
     title: "Remove Background Online – Free Transparent PNG",
     description: "Remove an image background with local AI and download a transparent PNG. Works with JPG, PNG and WebP without uploading your image.",

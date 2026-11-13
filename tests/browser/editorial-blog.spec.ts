@@ -62,7 +62,7 @@ test('the blog index and comparison articles export with schema, sources and cor
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',absoluteUrl(`/blog/${post.slug}/`));
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),post.slug).toBeTruthy();
   await expect(page.locator('.ad-blog-table')).toHaveCount(1);await expect(page.locator('.ad-footer')).toHaveCount(1);
-  await expect(page.locator('.footer-tools a')).toHaveCount(40);
+  await expect(page.locator('.footer-tools a')).toHaveCount(41);
  }
  await page.screenshot({path:'research/blog-article-mobile.png',fullPage:true});
 });

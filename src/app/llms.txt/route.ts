@@ -7,7 +7,7 @@ export const dynamic = 'force-static';
 export function GET() {
   const text = [
     '# Zipora', '',
-    '> Zipora offers 40 free browser-based PDF, image, QR, JSON, favicon, text, URL and UUID tools. No signup or payment is required. Selected file contents are processed on the visitor’s device, not uploaded to a processing server.', '',
+    '> Zipora offers 41 free browser-based PDF, image, QR, JSON, favicon, text, URL and UUID tools. No signup or payment is required. Selected file contents are processed on the visitor’s device, not uploaded to a processing server.', '',
     `Canonical website: ${absoluteUrl('/')}`,
     'Website assets, PDF rendering resources and the optional portrait model are downloaded from the host. This is separate from uploading a selected file.', '',
     '## Live tools',

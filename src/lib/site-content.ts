@@ -4,6 +4,11 @@ export type Faq={question:string;answer:string};
 export type ToolInfo={slug:string;name:string;group:'PDF Tools'|'Image Tools'|'Other Tools';title:string;h1:string;description:string;cardDescription:string;steps:[string,string][];faqs:Faq[];related:string[]};
 type Detail={steps:[string,string][];facts:[string,string,string];questions:[string,string,string]};
 const details:Record<string,Detail>={
+ 'video-compressor':{
+  steps:[['Choose a video','Select or drop a supported MP4, WebM or MOV up to 100 MB and five minutes.'],['Pick a compression preset','Use Balanced to start, or select a smaller size or higher quality.'],['Preview and download','Compare the file sizes and play the result before saving the smaller MP4.']],
+  questions:['Can I compress a video without uploading it?','Will the video always get smaller?','Which browsers and formats work?'],
+  facts:['Yes. The video is encoded on your device and Zipora does not upload it. No signup is required.','Savings depend on the input. If an output is equal to or larger than your original, Zipora tells you to keep the original or try a smaller preset.','Use desktop Chrome or Edge for broad support. The tool accepts supported MP4, WebM and MOV files up to 100 MB, five minutes and 4K resolution. Output is H.264 MP4 with AAC audio when the source has a compatible audio track.'],
+ },
  'remove-background':{
   steps:[['Select an image','Choose or drop a JPG, PNG or WebP up to 20 MB.'],['Remove the background','The browser runs a local AI model to separate the main subject from the background.'],['Download a transparent PNG','Compare the before and after previews, then save the PNG at the original dimensions.']],
   questions:['Does Zipora upload my image?','Does the PNG keep the original size?','What images work best?'],
@@ -139,6 +144,7 @@ const toolHeadings:Record<string,string>={
  'qr-code-generator':'QR Code Generator Free Online',
 };
 const cardDescriptions:Record<string,string>={
+ 'video-compressor':'Reduce video size and save an MP4.',
  'remove-background':'Make the background transparent.',
  'gemini-watermark-remover':'Clean supported Gemini image marks.',
  'gemini-video-watermark-remover':'Clean supported Gemini video marks.',
@@ -180,7 +186,7 @@ export const siteTools:ToolInfo[]=existingTools.map(tool=>{
  const name=slug==='resize-image'?'Resize Image':tool.name.replace(/ (\d+) KB/,' $1KB');
  const h1=toolHeadings[slug] ?? `${name} Online Free`;
  const guidance=toolGuidance[slug];
- return {slug,name,group:(slug==='gemini-video-watermark-remover'||slug==='qr-code-generator'||slug==='json-formatter'||slug==='favicon-generator'||slug==='word-counter'||slug==='url-encoder'||slug==='uuid-generator')?'Other Tools':name.includes('PDF')?'PDF Tools':'Image Tools',title:`${guidance.title} | Zipora`,h1,description:guidance.description,cardDescription:cardDescriptions[slug],steps:detail.steps,faqs:detail.questions.map((question,i)=>({question,answer:detail.facts[i]})),related:guidance.related};
+ return {slug,name,group:(slug==='video-compressor'||slug==='gemini-video-watermark-remover'||slug==='qr-code-generator'||slug==='json-formatter'||slug==='favicon-generator'||slug==='word-counter'||slug==='url-encoder'||slug==='uuid-generator')?'Other Tools':name.includes('PDF')?'PDF Tools':'Image Tools',title:`${guidance.title} | Zipora`,h1,description:guidance.description,cardDescription:cardDescriptions[slug],steps:detail.steps,faqs:detail.questions.map((question,i)=>({question,answer:detail.facts[i]})),related:guidance.related};
 });
 export function toolInfo(slug:string){const match=siteTools.find(t=>t.slug===(slug==='image-resizer'?'resize-image':slug));if(!match)throw new Error(`Unknown tool: ${slug}`);return match;}
 export const comparisonPaths=['/compare/zipora-vs-ilovepdf/','/compare/zipora-vs-removebg/'];

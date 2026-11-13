@@ -106,3 +106,7 @@ ONNX Runtime Web (MIT)
 https://github.com/microsoft/onnxruntime
 License: /models/onnxruntime/LICENSE
 Third-party notices: /models/onnxruntime/ThirdPartyNotices.txt
+
+Mediabunny 1.65.2 (MPL-2.0)
+License: /licenses/mediabunny/LICENSE
+Corresponding source: https://registry.npmjs.org/mediabunny/-/mediabunny-1.65.2.tgz

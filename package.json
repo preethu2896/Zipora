@@ -19,6 +19,7 @@
     "heic-to": "1.6.7",
     "jszip": "^3.10.1",
     "lucide-react": "^0.468.0",
+    "mediabunny": "1.65.2",
     "next": "^16.0.0",
     "onnxruntime-web": "1.31.1",
     "pdf-lib": "^1.17.1",
