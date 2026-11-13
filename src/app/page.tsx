@@ -67,7 +67,7 @@ export default function Home() {
             <HomeSearch/>
           </div>
           <p className="home-proof"><strong>41 tools</strong><span aria-hidden="true">·</span>100% private</p>
-          <p>Files stay in your browser. Nothing uploads.</p>
+          <p className="home-privacy-line">Files stay in your browser. Nothing uploads.</p>
         </section>
 
         <AdSlot position="hero"/>

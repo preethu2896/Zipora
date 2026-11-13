@@ -207,3 +207,42 @@ body:has(.tool-site-sidebar[data-theme="dark"]) .main-shell :is(.option-warning,
   border-color: #866234;
 }
 body:has(.tool-site-sidebar[data-theme="dark"]) .preview-page { color: #171b22; }
+
+@media (max-width: 560px) {
+  body .zipora-home .home-shell-content { padding-inline: 20px; }
+  body .zipora-home .home-sidebar-top { padding: 4px 12px 4px 20px; }
+  body .zipora-home .home-wordmark { font-size: 22px; }
+  body .zipora-home :is(.home-menu, .home-theme-toggle) { border-color: transparent; }
+  body .zipora-home .home-intro { display: grid; justify-items: start; padding-top: 24px; }
+  body .zipora-home .home-intro h1 { font-size: clamp(27px, 7vw, 32px); }
+  body .zipora-home .home-intro p { font-size: 14px; }
+  body .zipora-home .home-actions { display: contents; }
+  body .zipora-home .home-intro .home-primary { grid-row: 3; margin-top: 16px; }
+  body .zipora-home .home-intro .home-proof { grid-row: 4; margin-top: 8px; font-size: 13px; }
+  body .zipora-home .home-intro .home-privacy-line { grid-row: 5; margin-top: 4px; font-size: 13px; }
+  body .zipora-home .home-search { grid-row: 6; max-width: none; margin-top: 16px; }
+  body .zipora-home .home-search input { font-size: 16px; }
+  body .zipora-home .home-block h2 { font-size: 22px; }
+  body .zipora-home :is(.home-popular, .home-sponsors) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  body .zipora-home .home-popular a { grid-template-columns: auto minmax(0, 1fr); gap: 8px; padding: 8px; }
+  body .zipora-home .home-popular a > svg { display: none; }
+  body .zipora-home .home-popular .home-icon { width: 28px; height: 28px; }
+  body .zipora-home .home-popular .home-icon svg { width: 16px; height: 16px; }
+  body .zipora-home .home-popular strong { font-size: 13px; }
+  body .zipora-home .home-popular small { font-size: 12px; }
+  body .zipora-home .home-sponsor-heading { gap: 6px 12px; }
+  body .zipora-home .home-sponsor-heading h2 { font-size: 16px; }
+  body .zipora-home .home-sponsor-heading .home-text-link { font-size: 12px; }
+  body .zipora-home .home-sponsors { background: var(--home-soft); border: 1px solid var(--home-line); border-radius: 12px; padding: 8px; }
+  body .zipora-home .home-sponsors li { min-height: 56px; padding: 6px 8px; border-radius: 8px; background: var(--home-card); }
+  body .zipora-home .home-tool-list .tool-link { display: flex; align-items: stretch; padding: 16px; gap: 10px; }
+  body .zipora-home .home-card-top { justify-content: flex-start; align-items: center; gap: 8px; }
+  body .zipora-home .home-task-grid { grid-template-columns: minmax(0, 1fr); }
+  body .zipora-home .home-faq { display: grid; gap: 8px; border-top: 0; }
+  body .zipora-home .home-faq details { border: 1px solid var(--home-line); border-radius: 12px; background: var(--home-card); padding-inline: 12px; }
+  body .zipora-home .home-faq summary { padding-block: 12px; }
+  body .zipora-home .zipora-footer :is(.footer-columns, .footer-tools) { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  body .zipora-home .zipora-footer .footer-columns section { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; margin: 0; }
+  body .zipora-home .zipora-footer .footer-columns h2 { width: 100%; margin: 0; font-weight: 700; }
+  body .zipora-home .zipora-footer .footer-columns a { display: inline-flex; align-items: center; min-height: 30px; }
+}

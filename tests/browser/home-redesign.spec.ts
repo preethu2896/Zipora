@@ -48,6 +48,13 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
     await page.goto('/');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     if (width < 800) {
+      for (const [selector, columns] of [['.home-popular', 2], ['.home-sponsors', 2], ['.home-tool-list', 1]] as const) {
+        const count = await page.locator(selector).first().evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
+        expect(count, selector).toBe(columns);
+      }
+      const proof = await page.locator('.home-proof').boundingBox();
+      const searchBox = await page.getByRole('searchbox').boundingBox();
+      expect(searchBox!.y).toBeGreaterThan(proof!.y + proof!.height);
       await page.getByRole('button', { name: 'Open navigation' }).click();
       await expect(page.locator('#home-navigation')).toBeVisible();
       await expect(page.locator('#home-navigation').getByRole('link', { name: 'Home', exact: true })).toBeVisible();
