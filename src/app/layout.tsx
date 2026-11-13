@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './polish.css';
+import './home.css';
 import { ToolSearchProvider } from '@/components/tool-search';
 import { siteUrl } from '@/lib/site-url';
 import { ToolRouteScroll } from '@/components/tool-route-scroll';

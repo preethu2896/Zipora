@@ -7,7 +7,6 @@ import { RecentToolLinks } from '@/components/recent-tool-links';
 import ToolDirectory from '@/components/tool-directory';
 import { pageMetadata, webPageSchema } from '@/lib/seo';
 import { siteTools, toolInfo } from '@/lib/site-content';
-import './home.css';
 
 export const metadata = {
   ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, QR, JSON, favicon and text tools from Zipora. Find the right tool for your task and process files in your browser without signing up.'),
