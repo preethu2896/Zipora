@@ -1,37 +1,43 @@
 import Link from 'next/link';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, ChevronRight, FileText, Image, Layers, Plus, Scissors, Video } from 'lucide-react';
 import { AdSlot, SiteFooter } from '@/components/site-chrome';
-import { HomeHeader } from '@/components/home-header';
-import { HomeCompressionDemo } from '@/components/home-compression-demo';
+import { HomeHeader, HomeSearch } from '@/components/home-header';
 import { JsonLd } from '@/components/json-ld';
 import { RecentToolLinks } from '@/components/recent-tool-links';
 import ToolDirectory from '@/components/tool-directory';
-import { ToolSearch } from '@/components/tool-search';
 import { pageMetadata, webPageSchema } from '@/lib/seo';
-import { siteTools } from '@/lib/site-content';
+import { siteTools, toolInfo } from '@/lib/site-content';
 import './home.css';
 
-export const metadata = pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, QR, JSON, favicon and text tools from Zipora. Find the right tool for your task and process files in your browser without signing up.');
+export const metadata = {
+  ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, QR, JSON, favicon and text tools from Zipora. Find the right tool for your task and process files in your browser without signing up.'),
+  title: 'Free Online PDF, Image, Video and QR Tools | Zipora',
+};
 
-const recent = [
-  'video-compressor', 'remove-background', 'gemini-video-watermark-remover', 'gemini-watermark-remover',
-  'rotate-pdf', 'watermark-pdf', 'add-page-numbers-to-pdf', 'protect-pdf', 'unlock-pdf', 'word-to-pdf',
-  'pdf-to-word', 'excel-to-pdf', 'pdf-to-excel', 'crop-image', 'rotate-image', 'heic-to-jpg', 'webp-to-jpg',
-  'json-formatter', 'favicon-generator', 'word-counter', 'url-encoder', 'uuid-generator',
-];
-
+const recent = ['video-compressor', 'remove-background', 'gemini-watermark-remover', 'gemini-video-watermark-remover'];
 const popular = [
-  ['Merge PDF', 'Combine PDFs into one.', '/merge-pdf/'],
-  ['Compress PDF', 'Reduce PDF file size.', '/compress-pdf/'],
-  ['Compress Image to 20KB', 'Get a 20KB JPG.', '/compress-image-to-20kb/'],
-  ['Image Compressor', 'Reduce image file size.', '/image-compressor/'],
+  ['merge-pdf', 'Combine PDFs into one.', Layers],
+  ['remove-background', 'Make the background transparent.', Scissors],
+  ['compress-pdf', 'Reduce PDF file size.', FileText],
+  ['compress-image-to-20kb', 'Fit an image to a 20 KB limit.', Image],
+  ['video-compressor', 'Save a smaller MP4.', Video],
+  ['image-compressor', 'Reduce image file size.', Image],
+] as const;
+
+const free = [
+  ['remove-background', 'Up to 20 MB in, transparent PNG out. Runs in your browser.'],
+  ['video-compressor', 'Up to 100 MB and 5 minutes in, H.264 MP4 out.'],
+  ['gemini-watermark-remover', 'Up to 20 MB in, PNG out.'],
+  ['gemini-video-watermark-remover', 'Up to 50 MB in, MP4 out.'],
 ];
 
-const proof = [
-  ['Video Compressor', '1.23 MB → 683.76 KB', '44% smaller', '/video-compressor/'],
-  ['Remove Background', '71.1% transparent', 'Clean corners on a portrait test', '/remove-background/'],
-  ['Compress Image to 20KB', '1.52 MB → 19.57 KB', 'JPEG export', '/compress-image-to-20kb/'],
-];
+const tasks = [
+  ['Compress a file', ['compress-pdf-to-100kb', 'compress-image-to-20kb', 'video-compressor']],
+  ['Remove a background or mark', ['remove-background', 'gemini-watermark-remover']],
+  ['Convert a file', ['jpg-to-pdf', 'png-to-jpg', 'webp-to-jpg', 'heic-to-jpg']],
+  ['Edit a PDF', ['merge-pdf', 'split-pdf', 'rotate-pdf', 'protect-pdf']],
+  ['Make a QR code', ['qr-code-generator']],
+] as const;
 
 const steps = [
   ['Choose a tool', 'Pick any of the 41 tools. No signup needed.'],
@@ -44,70 +50,82 @@ const questions = [
   ['Do I need an account?', 'No. All 41 tools are free to use without signing up.'],
   ['Does Zipora add a watermark?', 'Zipora adds no watermark to your downloads. Watermark PDF lets you add your own text or image when you choose to.'],
   ['Can I use Zipora on my phone?', 'Use a current mobile browser. Large files depend on your device’s memory, and some video tools work best in desktop Chrome or Edge.'],
+  ['Will Zipora change my original file?', 'No. Download the result as a separate file.'],
+  ['Are there file size limits?', 'Some tools have their own limits. The supported file sizes are shown on the tool page.'],
 ];
 
 export default function Home() {
   return <div className="zipora-home">
-    <a className="skip-link" href="#main">Skip to tools</a>
+    <a className="skip-link" href="#main">Skip to main content</a>
     <HomeHeader/>
-    <main id="main">
-      <section className="home-hero">
-        <p className="home-count">41 free tools</p>
-        <h1><span>Your files.</span><span>Done in a flash.</span></h1>
-        <p className="home-lede">41 free PDF, image and video tools that run in your browser. Files stay in your browser. Nothing uploads.</p>
-        <div className="home-hero-actions">
-          <a className="home-button home-button-primary" href="#tools">Browse all tools</a>
-          <Link className="home-button" href="/remove-background/">Try Remove Background</Link>
-        </div>
-        <p className="home-trust">Free · No signup · No upload</p>
-      </section>
-
-      <div className="home-editorial-shell">
-        <section className="home-block" aria-labelledby="playground-heading">
-          <div className="home-section-title"><p className="home-kicker">Try it live</p>
-            <h2 id="playground-heading">Image compression playground</h2>
+    <div className="home-content">
+      <main id="main" className="home-shell-content">
+        <section className="home-intro">
+          <h1>Free PDF, Image &amp; Video Tools</h1>
+          <p>41 free tools that run in your browser. Merge PDFs, remove backgrounds, compress videos. No added watermark or sign-up.</p>
+          <div className="home-actions">
+            <a className="home-primary" href="#tools">Browse all tools <ArrowRight size={17} aria-hidden="true"/></a>
+            <HomeSearch/>
           </div>
-          <HomeCompressionDemo/>
-          <div className="home-demo-caption">
-            <a href="https://www.nasa.gov/image-article/blue-marble-image-of-earth-from-apollo-17/">Sample photo by NASA / Apollo 17</a>
-            <Link href="/image-compressor/">Try the full Image Compressor <ArrowRight size={16} aria-hidden="true"/></Link>
-          </div>
-          <div className="home-proof" aria-label="Results from previous Zipora tests">
-            {proof.map(([name, result, note, href]) => <Link key={href} href={href}>
-              <span>{name}</span><strong>{result}</strong><small>{note}</small>
-            </Link>)}
-          </div>
+          <p className="home-proof"><strong>41 tools</strong><span aria-hidden="true">·</span>100% private</p>
+          <p>Files stay in your browser. Nothing uploads.</p>
         </section>
 
         <AdSlot position="hero"/>
 
-        <div className="home-block home-tool-area">
-          <div className="home-section-title"><p className="home-kicker">All tools</p><h2>Find the tool you need</h2></div>
-          <section className="home-popular" aria-labelledby="popular-heading">
-            <h3 id="popular-heading">Popular tools</h3>
-            <div>{popular.map(([name, description, href]) => <Link key={href} href={href}>
-              <strong>{name}</strong><span>{description}</span>
-            </Link>)}</div>
-          </section>
-          <div id="find-tools"><ToolSearch hero/></div>
-          <ToolDirectory/>
-          <RecentToolLinks tools={siteTools.map(({ slug, name }) => ({ slug, name }))} added={recent}/>
-        </div>
+        <section className="home-block">
+          <h2>Most used</h2>
+          <div className="home-popular home-pair-grid">{popular.map(([slug, subtitle, Icon]) => <Link href={`/${slug}/`} key={slug}>
+            <span className="home-icon"><Icon size={20} aria-hidden="true"/></span>
+            <span><strong>{toolInfo(slug).name}</strong><small>{subtitle}</small></span>
+            <ChevronRight size={18} aria-hidden="true"/>
+          </Link>)}</div>
+        </section>
+
+        <section className="home-block">
+          <div className="home-sponsor-heading">
+            <div className="home-heading"><h2>Sponsors keep Zipora free</h2><span className="home-tag">Ad</span></div>
+            <Link className="home-text-link" href="/contact/?subject=sponsor-enquiry">Put your brand here · $30 a month →</Link>
+          </div>
+          <ol className="home-sponsors" aria-label="Available sponsor frames">
+            {Array.from({ length: 12 }, (_, index) => <li key={index}>
+              <span>Frame {index + 1} is free</span><small>Put your brand here · $30 a month</small>
+            </li>)}
+          </ol>
+        </section>
+
+        <ToolDirectory newest={recent}/>
+        <RecentToolLinks tools={siteTools.map(({ slug, name }) => ({ slug, name }))} added={recent}/>
+
+        <section className="home-block">
+          <h2>What’s free, tool by tool</h2>
+          <div className="home-pair-grid">{free.map(([slug, limit]) => {
+            const tool = toolInfo(slug);
+            return <article className="home-panel" key={slug}>
+              <h3><Link href={`/${slug}/`}>{tool.name}</Link></h3>
+              <p>{tool.cardDescription}</p><p><strong>Free:</strong> {limit}</p>
+            </article>;
+          })}</div>
+          <p className="home-section-copy">Every tool is free and processes files on your device. Check individual tools for supported sizes and formats.</p>
+        </section>
+
+        <section className="home-block">
+          <h2>Popular tasks</h2>
+          <div className="home-task-grid">{tasks.map(([title, slugs]) => <section key={title}>
+            <h3>{title}</h3>
+            <ul>{slugs.map(slug => <li key={slug}><Link href={`/${slug}/`}>{toolInfo(slug).name}</Link></li>)}</ul>
+          </section>)}</div>
+        </section>
 
         <section className="home-block" id="how-it-works">
-          <div className="home-section-title"><p className="home-kicker">How it works</p><h2>Three steps to a finished file</h2></div>
-          <ol className="home-process">{steps.map(([title, description]) => <li key={title}>
+          <h2>How it works</h2>
+          <ol className="home-steps">{steps.map(([title, description]) => <li key={title} className="home-panel">
             <h3>{title}</h3><p>{description}</p>
           </li>)}</ol>
         </section>
 
-        <section className="home-block">
-          <div className="home-section-title"><h2>Why Zipora</h2></div>
-          <ul className="home-benefits">{['Free', 'No signup', 'Files stay in your browser', 'No watermark'].map(item => <li key={item}>{item}</li>)}</ul>
-        </section>
-
         <section className="home-block" id="faq">
-          <div className="home-section-title"><p className="home-kicker">Questions</p><h2>Frequently asked questions</h2></div>
+          <h2>Frequently asked questions</h2>
           <div className="home-faq">{questions.map(([question, answer]) => <details key={question}>
             <summary>{question}<Plus size={18} aria-hidden="true"/></summary><p>{answer}</p>
           </details>)}</div>
@@ -115,11 +133,11 @@ export default function Home() {
 
         <section className="home-block home-closing">
           <h2>Ready to get a file done?</h2>
-          <a className="home-button home-button-primary" href="#tools">Browse all tools</a>
+          <a className="home-primary" href="#tools">Browse all tools <ArrowRight size={17} aria-hidden="true"/></a>
         </section>
-      </div>
-    </main>
+      </main>
+      <SiteFooter textWordmark/>
+    </div>
     <JsonLd data={{ '@context': 'https://schema.org', ...webPageSchema('/', 'Zipora — Free PDF, image and QR tools', '41 free browser-based tools for PDFs, images, QR codes and JSON. No signup or file uploads.') }}/>
-    <SiteFooter/>
   </div>;
 }

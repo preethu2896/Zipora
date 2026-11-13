@@ -20,10 +20,11 @@ test('all canonical pages export unique metadata, social cards and consistent vi
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
     expect(await page.locator('meta[name="robots"]').evaluateAll(nodes => nodes.map(n => n.getAttribute('content')).join(' '))).not.toContain('noindex');
-    for (const [property, value] of [['og:title', title], ['og:description', description!], ['og:url', canonical], ['og:site_name', 'Zipora'], ['og:image', absoluteUrl('/social-card.png')], ['og:image:width', '1200'], ['og:image:height', '630']]) {
+    const socialTitle = path === '/' ? 'Zipora — Free Online PDF, Image and QR Tools' : title;
+    for (const [property, value] of [['og:title', socialTitle], ['og:description', description!], ['og:url', canonical], ['og:site_name', 'Zipora'], ['og:image', absoluteUrl('/social-card.png')], ['og:image:width', '1200'], ['og:image:height', '630']]) {
       await expect(page.locator(`meta[property="${property}"]`)).toHaveAttribute('content', value);
     }
-    for (const [name, value] of [['twitter:card', 'summary_large_image'], ['twitter:title', title], ['twitter:description', description!], ['twitter:image', absoluteUrl('/social-card.png')]]) {
+    for (const [name, value] of [['twitter:card', 'summary_large_image'], ['twitter:title', socialTitle], ['twitter:description', description!], ['twitter:image', absoluteUrl('/social-card.png')]]) {
       await expect(page.locator(`meta[name="${name}"]`)).toHaveAttribute('content', value);
     }
     const graph = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.flatMap(node => {

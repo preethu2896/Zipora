@@ -38,15 +38,15 @@ test('all internal page links resolve, including legal and comparison breadcrumb
  await page.goto('/404.html');await expect(page.getByRole('heading',{name:'That page isn’t here'})).toBeVisible();
 });
 test('compact mobile header/menu, quiet hero, grouped cards and public contact work',async({page})=>{
- await page.setViewportSize({width:390,height:844});await page.goto('/');await expect(page).toHaveTitle('Zipora — Free Online PDF, Image and QR Tools');
+ await page.setViewportSize({width:390,height:844});await page.goto('/');await expect(page).toHaveTitle('Free Online PDF, Image, Video and QR Tools | Zipora');
  await expect(page.locator('[data-slot=sunset-bloom-background]')).toHaveCount(0);
  await expect(page.locator('#pdf-tools .tool-link')).toHaveCount(18);await expect(page.locator('#image-tools .tool-link')).toHaveCount(15);await expect(page.locator('#other-tools .tool-link')).toHaveCount(8);
  const columns=()=>page.locator('#pdf-tools .home-tool-list').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
  expect(await columns()).toBe(1);
  await page.setViewportSize({width:768,height:1000});expect(await columns()).toBe(2);
- await page.setViewportSize({width:1440,height:1000});expect(await columns()).toBe(3);
+ await page.setViewportSize({width:1440,height:1000});expect(await columns()).toBe(2);
  await page.setViewportSize({width:390,height:844});
- await page.getByRole('button',{name:'Open navigation'}).click();await expect(page.locator('#home-navigation')).toBeVisible();await page.locator('#home-navigation').getByRole('link',{name:'Image Tools',exact:true}).click();await expect(page.getByRole('button',{name:'Open navigation'})).toBeVisible();
+ await page.getByRole('button',{name:'Open navigation'}).click();await expect(page.locator('#home-navigation')).toBeVisible();await page.locator('#home-navigation').getByRole('link',{name:'Merge PDF',exact:true}).click();await expect(page).toHaveURL(/merge-pdf/);
  for(const path of publicPaths){await page.goto(path);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),path).toBeTruthy();if(siteTools.some(t=>path===`/${t.slug}/`)){await expect(page.locator('.side-panel')).toBeHidden();await expect(page.locator('.ad-sidebar')).toBeVisible();}}
  await page.goto('/contact/');await expect(page.locator('.contact-address')).toHaveText(`Contact email: ${contactEmail}`);await expect(page.locator('.contact-address a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('.contact-message a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('main')).not.toContainText('Contact email — coming soon');
  await page.goto('/compare/zipora-vs-removebg/');await expect(page.locator('.availability-note')).toContainText('Remove Background is available');await expect(page.locator('.sources a').first()).toHaveAttribute('href','https://www.remove.bg/faq');
@@ -58,6 +58,6 @@ test('all card descriptions fit without truncation at phone and desktop widths',
   await expect(page.locator('.home-tool-list .tool-link p')).toHaveCount(41);
   const failures=await page.locator('.home-tool-list .tool-link p,.popular-grid p').evaluateAll(nodes=>nodes.filter(node=>{const el=node as HTMLElement,style=getComputedStyle(el);return el.scrollWidth>el.clientWidth+1||el.getBoundingClientRect().height>2*parseFloat(style.lineHeight)+1||el.textContent?.includes('...');}).map(el=>el.textContent));
   expect(failures).toEqual([]);await expect(page.locator('.site-header input')).toHaveCount(0);
-  expect(await page.locator('.site-header').evaluate(el=>el.getBoundingClientRect().height)).toBeLessThanOrEqual(65);
+  if(width<=560) expect(await page.locator('.home-sidebar').evaluate(el=>el.getBoundingClientRect().height)).toBeLessThanOrEqual(65);
  }
 });

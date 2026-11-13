@@ -109,7 +109,7 @@ test('encrypted PDFs are rejected with an unlock instruction', async ({ page }) 
 test('redesigned homepage and empty merger work on desktop and mobile', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /Your files\.\s*Done in a flash\./ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Free PDF, Image & Video Tools' })).toBeVisible();
   await page.screenshot({ path: 'research/zipora-home-desktop.png', fullPage: true });
   await page.locator('.home-tool-list a[href="/merge-pdf/"]').click();
   await expect(page.getByRole('heading', { name: 'Merge PDF Online Free', exact: true })).toBeVisible();
