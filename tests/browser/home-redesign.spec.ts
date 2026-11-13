@@ -6,6 +6,9 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Free PDF, Image & Video Tools');
   await expect(page.locator('.zipora-home')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
   await expect(page.locator('.home-sidebar')).toHaveCSS('position', 'fixed');
+  await expect(page.locator('#home-navigation').getByRole('link', { name: 'Home', exact: true })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('.ad-slot')).toHaveCount(0);
+  await expect(page.getByRole('img', { name: /Product Hunt/ })).toHaveCSS('width', '160px');
   await expect(page.locator('.home-popular a')).toHaveCount(6);
   await expect(page.locator('.home-sponsors li')).toHaveCount(12);
   await expect(page.locator('.home-sponsors li').last()).toContainText('Frame 12 is free');
@@ -47,6 +50,7 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
     if (width < 800) {
       await page.getByRole('button', { name: 'Open navigation' }).click();
       await expect(page.locator('#home-navigation')).toBeVisible();
+      await expect(page.locator('#home-navigation').getByRole('link', { name: 'Home', exact: true })).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(page.getByRole('button', { name: 'Open navigation' })).toBeFocused();
     }

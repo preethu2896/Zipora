@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, Image, Menu, Moon, Search, Sun, Wrench, X } from 'lucide-react';
+import { FileText, House, Image, Menu, Moon, Search, Sun, Wrench, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { siteTools } from '@/lib/site-content';
 import { useToolSearch } from './tool-search';
@@ -65,7 +65,7 @@ export function HomeHeader({ toolPath }: { toolPath?: string }) {
       </button>
     </div>
     <nav id="home-navigation" aria-label="Tool navigation" className={open ? 'is-open' : ''}>
-      {toolPath && <Link href="/#tools" onClick={close}>All tools</Link>}
+      <Link href={toolPath ? '/' : '#top'} onClick={close} aria-current={toolPath ? undefined : 'page'}><House size={15} aria-hidden="true"/>Home</Link>
       {groups.map(([group, Icon]) => <section key={group}>
         <h2>{group}</h2>
         {siteTools.filter(tool => tool.group === group).map(tool => <Link href={`/${tool.slug}/`} key={tool.slug} prefetch={false} onClick={close}

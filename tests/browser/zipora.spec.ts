@@ -9,11 +9,10 @@ test('thirty-two tool pages have unique metadata, honest content, valid schema a
   titles.add(await page.title());descriptions.add(description!);headings.add(await page.locator('h1').innerText());
   await expect(page.locator('.footer-tools a')).toHaveCount(41);await expect(page.locator('.breadcrumb')).toHaveCount(0);
   await expect(page.locator('.what-next')).toHaveCount(0);await expect(page.locator('.side-panel')).toBeVisible();
-  expect(await page.locator('.ad-top').evaluate(ad=>Boolean(ad.compareDocumentPosition(document.querySelector('h1')!)&Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
   expect(await page.locator('.related-tools').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('#how-it-works')!)&Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
-  await expect(page.locator('.ad-footer')).toHaveCount(1);
+  await expect(page.locator('.ad-footer')).toHaveCount(0);
   await expect(page.locator('#how-it-works .steps li')).toHaveCount(3);await expect(page.locator('.faqs details')).toHaveCount(3);
-  await expect(page.locator('.ad-slot')).toHaveCount(3);await expect(page.locator('[data-slot=sunset-bloom-background]')).toHaveCount(0);
+  await expect(page.locator('.ad-slot')).toHaveCount(0);await expect(page.locator('[data-slot=sunset-bloom-background]')).toHaveCount(0);
   const graph=await page.locator('script[type="application/ld+json"]').evaluateAll(nodes=>nodes.flatMap(node=>JSON.parse(node.textContent||'{}')['@graph']||[]));
   expect(graph.map(x=>x['@type'])).toEqual(expect.arrayContaining(['SoftwareApplication','BreadcrumbList']));
   expect(graph.find(x=>x['@type']==='SoftwareApplication')).toMatchObject({name:`Zipora ${tool.name}`,url:absoluteUrl(`/${tool.slug}/`),offers:{price:'0'}});
@@ -47,7 +46,7 @@ test('compact mobile header/menu, quiet hero, grouped cards and public contact w
  await page.setViewportSize({width:1440,height:1000});expect(await columns()).toBe(2);
  await page.setViewportSize({width:390,height:844});
  await page.getByRole('button',{name:'Open navigation'}).click();await expect(page.locator('#home-navigation')).toBeVisible();await page.locator('#home-navigation').getByRole('link',{name:'Merge PDF',exact:true}).click();await expect(page).toHaveURL(/merge-pdf/);
- for(const path of publicPaths){await page.goto(path);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),path).toBeTruthy();if(siteTools.some(t=>path===`/${t.slug}/`)){await expect(page.locator('.side-panel')).toBeHidden();await expect(page.locator('.ad-sidebar')).toBeVisible();}}
+ for(const path of publicPaths){await page.goto(path);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),path).toBeTruthy();if(siteTools.some(t=>path===`/${t.slug}/`)){await expect(page.locator('.side-panel')).toBeHidden();await expect(page.locator('.ad-sidebar')).toHaveCount(0);}}
  await page.goto('/contact/');await expect(page.locator('.contact-address')).toHaveText(`Contact email: ${contactEmail}`);await expect(page.locator('.contact-address a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('.contact-message a')).toHaveAttribute('href',`mailto:${contactEmail}`);await expect(page.locator('main')).not.toContainText('Contact email — coming soon');
  await page.goto('/compare/zipora-vs-removebg/');await expect(page.locator('.availability-note')).toContainText('Remove Background is available');await expect(page.locator('.sources a').first()).toHaveAttribute('href','https://www.remove.bg/faq');
 });

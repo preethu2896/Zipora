@@ -29,8 +29,7 @@ test('merge, reorder, rename, download twice, and invalidate stale output', asyn
   await page.getByLabel('Output filename').fill('my-report');
   await page.getByRole('button', { name: 'Merge PDFs', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Your PDF is ready.' })).toBeVisible();
-  await expect(page.locator('.ad-download')).toHaveCount(1);
-  expect(await page.locator('.result').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('.ad-download')!)&Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
+  await expect(page.locator('.ad-download')).toHaveCount(0);
   for (let i = 0; i < 2; i++) {
     const downloadEvent = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download PDF', exact: true }).click();

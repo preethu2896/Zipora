@@ -164,7 +164,7 @@
   color: var(--home-muted);
 }
 
-body:has(.tool-site-sidebar) #home-navigation a[aria-current="page"] {
+:is(.zipora-home, body:has(.tool-site-sidebar)) #home-navigation a[aria-current="page"] {
   color: var(--home-blue);
   background: var(--home-tint);
   font-weight: 700;
