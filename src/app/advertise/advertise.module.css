@@ -27,6 +27,25 @@
 .error { color: #b91c1c; font-size: 14px; }
 .primary { justify-self: start; padding: 12px 18px; border-radius: 999px; background: #2563eb; color: white; font-weight: 700; cursor: pointer; }
 .primary:hover { background: #1d4ed8; }
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page {
+  color: var(--home-muted);
+}
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page :is(h1, h2, label, legend) {
+  color: var(--home-ink);
+}
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page :is(.card, input, textarea, .frames button) {
+  background: var(--home-card);
+  color: var(--home-ink);
+  border-color: var(--home-line);
+}
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page :is(a, .selection, .confirmation, button[aria-pressed="true"]) {
+  color: var(--home-blue);
+}
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page :is(.selection, .confirmation, button[aria-pressed="true"]) {
+  background: var(--home-tint);
+}
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page :is(.hint, label span) { color: var(--home-muted); }
+:global(body:has(.tool-site-sidebar[data-theme="dark"])) .page .error { color: #fca5a5; }
 @media (max-width: 760px) { .frames { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 500px) {
   .page { padding: 32px 16px 48px; }

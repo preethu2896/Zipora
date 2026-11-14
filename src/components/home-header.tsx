@@ -8,9 +8,10 @@ import { useToolSearch } from './tool-search';
 
 const groups = [['PDF Tools', FileText], ['Image Tools', Image], ['Other Tools', Wrench]] as const;
 const company = [['About', '/about/'], ['Contact', '/contact/'], ['Blog', '/blog/'], ['Privacy Policy', '/privacy-policy/'], ['Terms', '/terms/'], ['Security & Privacy', '/security-and-privacy/']];
+const companyNavigation = [...company, ['Advertise', '/advertise/'], ['Compare', '/compare/']];
 const themeKey = 'zipora-home-theme';
 
-export function HomeHeader({ toolPath }: { toolPath?: string }) {
+export function HomeHeader({ toolPath, companyPath }: { toolPath?: string; companyPath?: string }) {
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -51,9 +52,10 @@ export function HomeHeader({ toolPath }: { toolPath?: string }) {
     setOpen(false);
   }
 
-  return <header className={toolPath ? 'home-sidebar tool-site-sidebar' : 'home-sidebar'} data-theme={dark ? 'dark' : 'light'}>
+  const isInnerPage = Boolean(toolPath || companyPath);
+  return <header className={isInnerPage ? 'home-sidebar tool-site-sidebar' : 'home-sidebar'} data-theme={dark ? 'dark' : 'light'}>
     <div className="home-sidebar-top">
-      <Link href={toolPath ? '/' : '#top'} className="home-wordmark zipora-brand-lockup" onClick={close}>
+      <Link href={isInnerPage ? '/' : '#top'} className="home-wordmark zipora-brand-lockup" onClick={close}>
         <img src="/logo.png" width={32} height={32} alt=""/>Zipora
       </Link>
       <button type="button" className="home-theme-toggle" onClick={switchTheme}
@@ -67,7 +69,7 @@ export function HomeHeader({ toolPath }: { toolPath?: string }) {
       </button>
     </div>
     <nav id="home-navigation" aria-label="Tool navigation" className={open ? 'is-open' : ''}>
-      <Link href={toolPath ? '/' : '#top'} onClick={close} aria-current={toolPath ? undefined : 'page'}><House size={15} aria-hidden="true"/>Home</Link>
+      <Link href={isInnerPage ? '/' : '#top'} onClick={close} aria-current={isInnerPage ? undefined : 'page'}><House size={15} aria-hidden="true"/>Home</Link>
       {groups.map(([group, Icon]) => <section key={group}>
         <h2>{group}</h2>
         {siteTools.filter(tool => tool.group === group).map(tool => <Link href={`/${tool.slug}/`} key={tool.slug} prefetch={false} onClick={close}
@@ -75,7 +77,8 @@ export function HomeHeader({ toolPath }: { toolPath?: string }) {
           <Icon size={15} aria-hidden="true"/>{tool.name}
         </Link>)}
       </section>)}
-      <section><h2>About</h2>{company.map(([name, href]) => <Link key={href} href={href} onClick={close}>{name}</Link>)}</section>
+      <section><h2>Company</h2>{companyNavigation.map(([name, href]) => <Link key={href} href={href} onClick={close}
+        aria-current={companyPath === href ? 'page' : undefined}>{name}</Link>)}</section>
     </nav>
   </header>;
 }

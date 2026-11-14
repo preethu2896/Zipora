@@ -208,6 +208,16 @@ body:has(.tool-site-sidebar[data-theme="dark"]) .main-shell :is(.option-warning,
 }
 body:has(.tool-site-sidebar[data-theme="dark"]) .preview-page { color: #171b22; }
 
+body:has(.tool-site-sidebar[data-theme="dark"]) .editorial :is(.blog-card, .table-scroll table) {
+  background: var(--home-card);
+}
+body:has(.tool-site-sidebar[data-theme="dark"]) .editorial .table-scroll thead th {
+  background: var(--home-soft);
+}
+body:has(.tool-site-sidebar[data-theme="dark"]) .editorial :is(.intro p a, .sources a, .legal-section a, .contact-address a, .contact-message a, .blog-back) {
+  color: var(--home-blue);
+}
+
 @media (max-width: 560px) {
   body .zipora-home .home-shell-content { padding-inline: 20px; }
   body .zipora-home .home-sidebar-top { padding: 4px 12px 4px 20px; }
