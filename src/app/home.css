@@ -1,6 +1,10 @@
+body, .zipora-home {
+  --home-page: #f7f7f8;
+  background: var(--home-page);
+}
+
 :is(.zipora-home, body:has(.tool-site-sidebar)) {
   --home-blue: #2563eb;
-  --home-page: #fff;
   --home-card: #fff;
   --home-tint: #eff6ff;
   --home-hover: #fbfdff;
@@ -18,7 +22,7 @@
   z-index: 30;
   inset: 0 auto 0 0;
   width: var(--home-sidebar);
-  background: var(--home-page);
+  background: var(--home-chrome, #fff);
   border-right: 1px solid var(--home-line);
   display: flex;
   flex-direction: column;
@@ -82,6 +86,9 @@
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-transform strong { color: var(--home-blue); font-weight: 700; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-empty { padding: 16px; margin-top: 16px; border-radius: 8px; background: var(--home-soft); }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-panel { border: 1px solid var(--home-line); border-radius: 12px; padding: 16px; }
+.zipora-home :is(.home-popular a, .home-panel, .home-sponsors li, .home-closing) {
+  background: var(--home-card);
+}
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-panel h3, :is(.zipora-home, body:has(.tool-site-sidebar)) .home-task-grid h3 { font-size: 15px; font-weight: 700; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-panel p { margin-top: 4px; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-task-grid, :is(.zipora-home, body:has(.tool-site-sidebar)) .home-steps { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
@@ -96,7 +103,7 @@
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-faq details[open] summary svg { transform: rotate(45deg); }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-faq p { padding-bottom: 16px; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-closing { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding: 20px; border: 1px solid var(--home-line); border-radius: 12px; }
-:is(.zipora-home, body:has(.tool-site-sidebar)) .zipora-footer { background: var(--home-page); border-top: 1px solid var(--home-line); }
+:is(.zipora-home, body:has(.tool-site-sidebar)) .zipora-footer { background: var(--home-chrome, #fff); border-top: 1px solid var(--home-line); }
 :is(.zipora-home, body:has(.tool-site-sidebar)) :is(#main, #tools) { scroll-margin-top: 16px; }
 
 @media (max-width: 1050px) {
@@ -144,6 +151,7 @@
 :is(.zipora-home:has(> .home-sidebar[data-theme="dark"]), body:has(.tool-site-sidebar[data-theme="dark"])) {
   color-scheme: dark;
   --home-page: #09090b;
+  --home-chrome: #09090b;
   --home-card: #18181b;
   --home-ink: #fafafa;
   --home-muted: #b4b4bd;
