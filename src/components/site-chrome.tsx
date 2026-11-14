@@ -33,6 +33,7 @@ export function SiteHeader({active}:{active?:string}){
 const badgeSize = 'block h-[34.56px] w-[160px] max-w-full object-contain';
 
 const directoryBadges = [
+ { name: 'Featured on SuperLaunch List', href: 'https://superlaunchlist.com?ref=https%3A%2F%2Fwww.zipora.online', image: 'https://superlaunchlist.com/badge.svg', width: 174, height: 42 },
  { name: 'Featured on Tools Rodeo', href: 'https://www.tools.rodeo', image: 'https://www.tools.rodeo/badge/tools-rodeo-badge-dark-33368f08.svg', width: 216, height: 64, title: 'Featured on Tools Rodeo' },
  { name: 'Zipora on ProductsFarm', href: 'https://productsfarm.com/product/zipora', image: 'https://productsfarm.com/api/badge/zipora', width: 220, height: 48 },
  { name: 'Million Dot Homepage', href: 'https://milliondothomepage.com/product/zipora', image: 'https://milliondothomepage.com/assets/images/badge-dark.png' },
