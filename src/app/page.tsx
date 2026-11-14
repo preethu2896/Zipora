@@ -10,7 +10,7 @@ import { sponsorFrames } from '@/lib/sponsors';
 import { siteTools, toolInfo } from '@/lib/site-content';
 
 export const metadata = {
-  ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, QR, JSON, favicon and text tools from Zipora. Find the right tool for your task and process files in your browser without signing up.'),
+  ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, video, QR and text tools. Merge, compress and convert files in your browser without signup or file uploads.'),
   title: 'Free Online PDF, Image, Video and QR Tools | Zipora',
 };
 

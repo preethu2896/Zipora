@@ -46,6 +46,12 @@ test('all canonical pages export unique metadata, social cards and consistent vi
       expect(faq.mainEntity.map((q: { name: string; acceptedAnswer: { text: string } }) => ({ question: normalize(q.name), answer: normalize(q.acceptedAnswer.text) }))).toEqual(visible.map(v => ({ question: normalize(v.question), answer: normalize(v.answer) })));
     }
     const tool = siteTools.find(tool => path === `/${tool.slug}/`);
+    if (tool) {
+      const howTo = graph.find(node => node['@type'] === 'HowTo');
+      expect(howTo?.step).toEqual(tool.steps.map(([name, text]) => ({ '@type': 'HowToStep', name, text })));
+      expect(faq?.mainEntity).toHaveLength(tool.faqs.length);
+      if (tool.group === 'PDF Tools') await expect(page.getByRole('heading', { name: 'Zipora vs iLovePDF', exact: true })).toBeVisible();
+    }
     if (tool) expect(graph.find(node => node['@type'] === 'SoftwareApplication')).toMatchObject({ name: `Zipora ${tool.name}`, url: canonical, offers: { price: '0' } });
     if (path.startsWith('/blog/') && path !== '/blog/') {
       expect(graph.find(node => node['@type'] === 'Article')).toMatchObject({ mainEntityOfPage: canonical, author: { '@id': organization[0]['@id'] }, publisher: { '@id': organization[0]['@id'] } });
@@ -58,7 +64,7 @@ test('all canonical pages export unique metadata, social cards and consistent vi
 test('discovery files, compatibility canonicals and sharing/icon assets are statically available', async ({ request, page }) => {
   const sitemap = await (await request.get('/sitemap.xml')).text();
   expect([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]).sort()).toEqual(paths.map(absoluteUrl).sort());
-  expect(sitemap).not.toContain('<lastmod>');
+  expect([...sitemap.matchAll(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g)]).toHaveLength(paths.length);
   for (const alias of ['/image-resizer/', '/pdf-compressor/']) expect(sitemap).not.toContain(`<loc>${absoluteUrl(alias)}</loc>`);
   const robots = await (await request.get('/robots.txt')).text();
   expect(robots).toContain(`Sitemap: ${absoluteUrl('/sitemap.xml')}`); expect(robots).not.toContain('Disallow: /');

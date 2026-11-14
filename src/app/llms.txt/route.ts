@@ -16,7 +16,7 @@ export function GET() {
     `- [Compare file workflows](${absoluteUrl('/compare/')}): Supported tasks, processing and availability.`,
     `- [Zipora vs iLovePDF](${absoluteUrl('/compare/zipora-vs-ilovepdf/')}): Local PDF tasks versus a broader PDF suite.`,
     `- [Zipora vs remove.bg](${absoluteUrl('/compare/zipora-vs-removebg/')}): Image tools and availability; Zipora’s standalone background remover runs locally.`,
-    `- [Zipora Blog](${absoluteUrl('/blog/')}): Dated comparisons citing official sources; original fact-check date ${checkedDate}. Prices and service terms can change.`,
+    `- [Zipora Blog](${absoluteUrl('/blog/')}): Dated comparisons citing official sources; fact-check date ${checkedDate}. Prices and service terms can change.`,
     `- [${removeBgArticle.heading}](${absoluteUrl(removeBgArticle.path)}): ${removeBgArticle.summary}`,
     ...blogPosts.map(p => `- [${p.h1}](${absoluteUrl(`/blog/${p.slug}/`)}): ${p.summary}`), '',
     '## Scope and limitations',

@@ -29,3 +29,20 @@ export function webPageSchema(path: string, name: string, description: string, t
 export function breadcrumbSchema(items: { name: string; path: string }[]) {
   return { '@type': 'BreadcrumbList', itemListElement: items.map(({ name, path }, i) => ({ '@type': 'ListItem', position: i + 1, name, item: absoluteUrl(path) })) };
 }
+
+export function faqSchema(path: string, faqs: { question: string; answer: string }[]) {
+  return {
+    '@type': 'FAQPage', '@id': absoluteUrl(`${path}#faq`),
+    mainEntity: faqs.map(({ question, answer }) => ({
+      '@type': 'Question', name: question,
+      acceptedAnswer: { '@type': 'Answer', text: answer },
+    })),
+  };
+}
+
+export function howToSchema(path: string, name: string, steps: [string, string][]) {
+  return {
+    '@type': 'HowTo', '@id': absoluteUrl(`${path}#how-it-works`), name,
+    step: steps.map(([name, text]) => ({ '@type': 'HowToStep', name, text })),
+  };
+}

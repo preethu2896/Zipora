@@ -116,7 +116,7 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     description: "Format and validate JSON in your browser. Choose indentation, minify the input, and copy or download the result.",
     heading: "Read an API response more easily",
     example: "Paste a response and select two spaces to make nested objects and arrays easier to scan. Use Validate to check syntax or Minify to remove extra whitespace before saving a compact copy.",
-    related: ["qr-code-generator"],
+    related: ["qr-code-generator", "favicon-generator", "word-counter", "url-encoder", "uuid-generator"],
   },
   "webp-to-jpg": {
     title: "WebP to JPG Converter Online – Single or Batch",

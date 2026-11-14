@@ -81,7 +81,7 @@ body, .zipora-home {
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-tool-list .tool-link:hover, :is(.zipora-home, body:has(.tool-site-sidebar)) .home-popular a:hover { border-color: var(--home-blue); background: var(--home-hover); }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-card-top { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-tool-list h4 { margin: 0 0 4px; font-size: 17px; font-weight: 700; }
-:is(.zipora-home, body:has(.tool-site-sidebar)) .home-tool-list .tool-link p { color: var(--home-muted); font-size: 14px; line-height: 1.5; white-space: normal; }
+:is(.zipora-home, body:has(.tool-site-sidebar)) .home-tool-list .tool-link p { color: var(--home-muted); font-size: 14px; line-height: 1.5; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-transform { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; margin-top: auto; padding: 8px 12px; border-radius: 8px; background: var(--home-soft); font-size: 13px; color: var(--home-muted); }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-transform strong { color: var(--home-blue); font-weight: 700; }
 :is(.zipora-home, body:has(.tool-site-sidebar)) .home-empty { padding: 16px; margin-top: 16px; border-radius: 8px; background: var(--home-soft); }

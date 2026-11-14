@@ -50,11 +50,11 @@ export const comparisonGuidance: Record<string, ComparisonGuidance> = {
     answer: "A merge creates a new PDF. Keep the signed original and check the receiving organization’s requirements before modifying or submitting a copy.",
   },
   'zipora-vs-canva-background-remover': {
-    description: "Compare Canva’s background removal with Zipora’s available image compression and resizing. See how to resize or compress a finished cutout.",
+    description: "Compare browser-based background removal in Zipora with Canva’s design workspace. See how to keep transparency when resizing a cutout.",
     heading: "Prepare an image after a cutout",
-    example: "Make the cutout in Canva if your task needs one. If the export has transparency, keep PNG or choose WebP when compressing in Zipora. A JPEG export gives the image a white background.",
+    example: "Start with Zipora Remove Background to make a transparent PNG. Use Canva if you want to place the cutout into a design. If the export has transparency, keep PNG or choose WebP when compressing in Zipora. A JPEG export gives the image a white background.",
     question: "Can Zipora resize an existing transparent cutout?",
-    answer: "Yes. Open the finished cutout in Resize Image and choose PNG output to retain transparency. General background removal is a separate task.",
+    answer: "Yes. Open the finished cutout in Resize Image and choose PNG output to retain transparency. Use Zipora Remove Background first if you still need to isolate the subject.",
   },
   'zipora-vs-photoroom': {
     description: "Compare Photoroom’s product-photo editing with Zipora’s resizing, compression and portrait print workflows.",

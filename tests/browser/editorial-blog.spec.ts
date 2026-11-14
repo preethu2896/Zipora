@@ -24,7 +24,7 @@ test('existing comparisons show updated facts and relevant calls to action',asyn
  await expect(page.locator('table')).not.toContainText('Check on their site');
  await expect(page.locator('table')).toContainText('Merge PDF 100 MB');
  await expect(page.locator('table')).toContainText('$5/month billed yearly');
- await expect(page.locator('.review-date')).toContainText('8 November 2026');
+ await expect(page.locator('.review-date')).toContainText('13 November 2026');
  await page.goto('/compare/zipora-vs-removebg/');
  await expect(page.locator('table')).not.toContainText('Check on their site');
  await expect(page.locator('.intro')).toContainText('1 December 2026 at 9:00am CET');
@@ -58,7 +58,7 @@ test('the blog index and comparison articles export with schema, sources and cor
   for(const href of links)expect((await request.get(href!)).status()).toBe(200);
   const schemas=await page.locator('script[type="application/ld+json"]').evaluateAll(s=>s.map(s=>JSON.parse(s.textContent!)));
   const article=schemas.find(s=>s['@type']==='Article');
-  expect(article.datePublished).toBe('2026-11-08');expect(article.dateModified).toBe('2026-11-11');
+  expect(article.datePublished).toBe('2026-11-08');expect(article.dateModified).toBe('2026-11-13');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href',absoluteUrl(`/blog/${post.slug}/`));
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),post.slug).toBeTruthy();
   await expect(page.locator('.ad-blog-table')).toHaveCount(0);await expect(page.locator('.ad-footer')).toHaveCount(0);

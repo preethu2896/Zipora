@@ -3,7 +3,7 @@ import { ArrowRight, LockKeyhole, Plus } from 'lucide-react';
 import { toolInfo } from '@/lib/site-content';
 import { toolGuidance, toolMeasurements } from '@/lib/tool-guidance';
 import { absoluteUrl } from '@/lib/site-url';
-import { webPageSchema, breadcrumbSchema, organizationId } from '@/lib/seo';
+import { webPageSchema, breadcrumbSchema, faqSchema, howToSchema, organizationId } from '@/lib/seo';
 import { AdSlot } from './site-chrome';
 import { JsonLd } from './json-ld';
 import { ToolControls } from './tool-session';
@@ -43,6 +43,8 @@ export function ToolSections({ slug }: { slug: string }) {
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     },
     breadcrumbSchema([{ name: 'Home', path: '/' }, { name: tool.group, path: categoryAnchor }, { name: tool.name, path }]),
+    faqSchema(path, tool.faqs),
+    howToSchema(path, `How to use ${tool.name}`, tool.steps),
   ];
   return <>
     <JsonLd data={{ '@context': 'https://schema.org', '@graph': graph }}/>
@@ -64,6 +66,7 @@ export function ToolSections({ slug }: { slug: string }) {
       {toolMeasurements[tool.slug] && <p>{toolMeasurements[tool.slug]}</p>}
       {tool.group === 'PDF Tools' && <p><Link className="text-link" href="/compare/zipora-vs-ilovepdf/">Compare Zipora and iLovePDF workflows<ArrowRight/></Link></p>}
     </section>
+    {tool.group === 'PDF Tools' && <PdfComparison />}
     {tool.group === 'Image Tools' && <ImageComparison />}
     <section className="faq-section">
       <div><h2>{tool.name} questions</h2><p>Short answers, then the practical details.</p></div>
@@ -71,7 +74,29 @@ export function ToolSections({ slug }: { slug: string }) {
         <details key={faq.question}><summary>{faq.question}<Plus/></summary><p>{faq.answer}</p></details>
       )}</div>
     </section>
+    {['word-counter', 'qr-code-generator'].includes(tool.slug) && <section className="legal-section">
+      <h2>Additional Details</h2>
+      <dl><dt>Name</dt><dd>{tool.name}</dd><dt>Price</dt><dd>Free</dd></dl>
+    </section>}
   </>;
+}
+
+function PdfComparison() {
+  const rows = [
+    ['Web plans', 'Free', 'Free Basic and paid plans'],
+    ['File processing', 'In your browser', 'On its servers'],
+    ['Processed file retention', 'Files stay on your device', 'Up to two hours for standard PDF jobs'],
+    ['Added output watermark', 'None', '—'],
+  ];
+  return <section className="legal-section">
+    <h2>Zipora vs iLovePDF</h2>
+    <div className="table-scroll"><table>
+      <thead><tr>{['Feature', 'Zipora', 'iLovePDF'].map(label => <th key={label} scope="col">{label}</th>)}</tr></thead>
+      <tbody>{rows.map(([label, own, other]) => <tr key={label}><th scope="row">{label}</th><td>{own}</td><td>{other}</td></tr>)}</tbody>
+    </table></div>
+    <p>Facts checked <time dateTime="2026-11-13">13 November 2026</time></p>
+    <p><a className="text-link" href="https://www.ilovepdf.com/pricing">Official pricing</a> · <a className="text-link" href="https://www.ilovepdf.com/help/faq">Official file retention FAQ</a></p>
+  </section>;
 }
 
 function ImageComparison() {
