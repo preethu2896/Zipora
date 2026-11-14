@@ -53,7 +53,9 @@ export function HomeHeader({ toolPath }: { toolPath?: string }) {
 
   return <header className={toolPath ? 'home-sidebar tool-site-sidebar' : 'home-sidebar'} data-theme={dark ? 'dark' : 'light'}>
     <div className="home-sidebar-top">
-      <Link href={toolPath ? '/' : '#top'} className="home-wordmark" onClick={close}>Zipora</Link>
+      <Link href={toolPath ? '/' : '#top'} className="home-wordmark zipora-brand-lockup" onClick={close}>
+        <img src="/logo.png" width={32} height={32} alt=""/>Zipora
+      </Link>
       <button type="button" className="home-theme-toggle" onClick={switchTheme}
         aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
         title={dark ? 'Switch to light mode' : 'Switch to dark mode'}>

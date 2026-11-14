@@ -1,0 +1,79 @@
+.zipora-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zipora-brand-lockup img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex: none;
+}
+
+.home-sidebar-top .home-wordmark { font-size: clamp(21px, 4vw, 25px); }
+.site-scroll-progress { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.home-tool-list .tool-link, .home-popular a, .related-tools a, .blog-card, .home-primary) {
+    transition: background-color 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out;
+  }
+
+  :is(.main-shell, .zipora-home) a:focus-visible {
+    outline: 2px solid var(--home-blue, var(--blue));
+    outline-offset: 4px;
+  }
+}
+
+@keyframes zipora-enter {
+  from { opacity: .7; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zipora-progress {
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :is(.home-intro h1, .intro h1) {
+    animation: zipora-enter 230ms ease-out both;
+  }
+
+  :is(.home-faq, .faqs) details[open] > p {
+    animation: zipora-enter 160ms ease-out both;
+  }
+
+  .home-faq summary svg, .faqs summary svg {
+    transition: transform 160ms ease-out;
+  }
+
+  .faqs details[open] summary svg { transform: rotate(45deg); }
+
+  @media (max-width: 800px) {
+    :is(#home-navigation, #main-navigation).is-open {
+      animation: zipora-enter 160ms ease-out both;
+    }
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .site-scroll-progress {
+      display: block;
+      position: fixed;
+      z-index: 40;
+      inset: 0 0 auto;
+      height: 2px;
+      background: #2563eb;
+      pointer-events: none;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: zipora-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+
+    .zipora-home :is(.home-block, .landing-section) h2 {
+      animation: zipora-enter linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
