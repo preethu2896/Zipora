@@ -190,5 +190,5 @@ export const siteTools:ToolInfo[]=existingTools.map(tool=>{
 });
 export function toolInfo(slug:string){const match=siteTools.find(t=>t.slug===(slug==='image-resizer'?'resize-image':slug));if(!match)throw new Error(`Unknown tool: ${slug}`);return match;}
 export const comparisonPaths=['/compare/zipora-vs-ilovepdf/','/compare/zipora-vs-removebg/'];
-export const companyPaths=['/about/','/contact/','/privacy-policy/','/terms/','/security-and-privacy/'];
+export const companyPaths=['/advertise/','/about/','/contact/','/privacy-policy/','/terms/','/security-and-privacy/'];
 export const publicPaths=['/','/compare/',...siteTools.map(t=>`/${t.slug}/`),...comparisonPaths,...companyPaths];

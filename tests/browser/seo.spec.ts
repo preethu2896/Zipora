@@ -52,7 +52,7 @@ test('all canonical pages export unique metadata, social cards and consistent vi
       await expect(page.locator('.review-date a[href="/about/"]')).toHaveText('Zipora');
     }
   }
-  expect(paths).toHaveLength(62); expect(siteTools).toHaveLength(41);
+  expect(paths).toHaveLength(63); expect(siteTools).toHaveLength(41);
 });
 
 test('discovery files, compatibility canonicals and sharing/icon assets are statically available', async ({ request, page }) => {

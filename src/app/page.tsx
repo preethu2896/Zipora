@@ -6,6 +6,7 @@ import { JsonLd } from '@/components/json-ld';
 import { RecentToolLinks } from '@/components/recent-tool-links';
 import ToolDirectory from '@/components/tool-directory';
 import { pageMetadata, webPageSchema } from '@/lib/seo';
+import { sponsorFrames } from '@/lib/sponsors';
 import { siteTools, toolInfo } from '@/lib/site-content';
 
 export const metadata = {
@@ -84,11 +85,12 @@ export default function Home() {
         <section className="home-block">
           <div className="home-sponsor-heading">
             <div className="home-heading"><h2>Sponsors keep Zipora free</h2><span className="home-tag">Ad</span></div>
-            <Link className="home-text-link" href="/contact/?subject=sponsor-enquiry">Put your brand here · $30 a month →</Link>
+            <Link className="home-text-link" href="/advertise/">Put your brand here · $30 a month →</Link>
           </div>
           <ol className="home-sponsors" aria-label="Available sponsor frames">
-            {Array.from({ length: 12 }, (_, index) => <li key={index}>
-              <span>Frame {index + 1} is free</span><small>Put your brand here · $30 a month</small>
+            {sponsorFrames.map(frame => <li key={frame.number}>
+              <span>Frame {frame.number} is {frame.taken ? 'taken' : 'free'}</span><small>Put your brand here · $30 a month</small>
+              {!frame.taken && <Link className="home-text-link" href={`/advertise/?frame=${frame.number}`}>Book this frame →</Link>}
             </li>)}
           </ol>
         </section>

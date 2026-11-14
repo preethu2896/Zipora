@@ -1,0 +1,36 @@
+.page { max-width: 900px; margin: 0 auto; padding: 48px 24px 64px; color: #6b7280; }
+.page h1, .page h2, .form label, .form legend { color: #111827; font-weight: 700; }
+.page h1 { font-size: clamp(34px, 6vw, 48px); }
+.page h2 { font-size: 28px; margin-bottom: 12px; }
+.page p { margin-top: 10px; }
+.page section { margin-top: 32px; }
+.page ul { margin: 0; padding-left: 20px; }
+.page li + li { margin-top: 8px; }
+.page a { color: #1d4ed8; text-decoration: underline; overflow-wrap: anywhere; }
+.page .benefits { padding: 0; list-style: none; }
+.benefits li { display: flex; gap: 8px; }
+.benefits svg { flex: none; margin-top: 3px; color: #15803d; }
+.card { padding: 24px; border: 1px solid #e5e7eb; border-radius: 20px; background: white; }
+.form { display: grid; gap: 16px; }
+.form fieldset { margin: 0; padding: 0; min-width: 0; border: 0; }
+.form label { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.form label span, .hint { color: #6b7280; font-size: 13px; }
+.form :is(input, textarea) { display: block; width: 100%; min-width: 0; border: 1px solid #d1d5db; border-radius: 8px; background: white; color: #111827; padding: 10px; font: inherit; }
+.form [aria-invalid="true"] { border-color: #b91c1c; }
+.frames { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.frames button { display: grid; justify-items: center; align-content: center; min-height: 64px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; color: #111827; cursor: pointer; }
+.frames button span, .frames button small { font-size: 12px; }
+.frames button[aria-pressed="true"] { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
+.frames button:disabled { background: #f3f4f6; color: #6b7280; text-decoration: line-through; cursor: not-allowed; }
+.selection, .confirmation { padding: 12px; border-radius: 10px; background: #eff6ff; color: #1e3a8a; }
+.preview { display: block; margin-top: 8px; object-fit: contain; border: 1px solid #e5e7eb; border-radius: 8px; }
+.error { color: #b91c1c; font-size: 14px; }
+.primary { justify-self: start; padding: 12px 18px; border-radius: 999px; background: #2563eb; color: white; font-weight: 700; cursor: pointer; }
+.primary:hover { background: #1d4ed8; }
+@media (max-width: 760px) { .frames { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 500px) {
+  .page { padding: 32px 16px 48px; }
+  .card { padding: 16px; }
+  .frames { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .primary { width: 100%; }
+}

@@ -24,6 +24,7 @@ export function GET() {
     'File, page, pixel and browser-memory limits apply. PDF size targets are not guaranteed. Balanced PDF compression preserves selectable text; Strong can rasterize pages at 150 DPI and lose document features. Image size targets may reduce dimensions. Passport framing and optional local portrait background replacement do not certify official acceptance.',
     'Remove Background is live and exports transparent PNGs locally. Supported Gemini image and video watermark cleanup is available. PDF to Word and PDF to Excel convert PDFs with selectable text. Zipora does not offer OCR or official photo certification.', '',
     '## About, contact and legal information',
+    `- [Advertise on Zipora](${absoluteUrl('/advertise/')}): Homepage sponsor frame enquiries.`,
     `- [About Zipora](${absoluteUrl('/about/')}): Identity, supported tasks and local processing.`,
     `- [Contact Zipora](${absoluteUrl('/contact/')}): Tool issues, feedback and corrections.`,
     `- [Email Zipora](mailto:${contactEmail}): Do not send private files or identity documents.`,
