@@ -47,8 +47,6 @@ export function SplitImageTool() {
   const [error, setError] = useState('');
   const [dragging, setDragging] = useState(false);
   const [selected, setSelected] = useState<number>();
-  const [caption, setCaption] = useState('');
-  const [mobilePreview, setMobilePreview] = useState(false);
   const preview = useBlobUrl(source?.file);
   const maxStrips = Math.min(maxPieces, (direction === 'Horizontal' ? source?.height : source?.width) ?? maxPieces);
   const stripCount = Math.min(maxStrips, Math.max(2, Math.trunc(Number(pieces)) || 2));
@@ -244,7 +242,7 @@ export function SplitImageTool() {
                 style={{ left: `${x / source.width * 100}%`, top: `${y / source.height * 100}%`, width: `${width / source.width * 100}%`, height: `${height / source.height * 100}%` }} />)}
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">Pieces in upload order</h3>
+          <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">Numbered pieces</h3>
             <button className="primary" type="button" disabled={disabled} onClick={() => void download()}><Download size={16} aria-hidden="true" /> Download all {tiles.length} as ZIP</button>
           </div>
           {tooLarge && <p className="error-message">Add rows or columns to keep each tile within 8192 pixels per side and 16 megapixels.</p>}
@@ -262,33 +260,6 @@ export function SplitImageTool() {
           </ul>
           {selected !== undefined && <p role="status" className="text-sm">{filename(selected)} · {tiles[selected].width} × {tiles[selected].height} px</p>}
         </div>
-      </div>
-      <div className="grid gap-4 border-t border-[var(--line)] pt-4 lg:grid-cols-2">
-        <div className="grid content-start gap-2">
-          <label className="grid gap-1 font-semibold">Caption for X
-            <textarea className={fieldStyle} rows={3} maxLength={280} value={caption} onChange={event => setCaption(event.target.value)} />
-          </label>
-          <span className="text-sm text-[var(--muted)]">{caption.length}/280</span>
-          <div><a className="secondary-action" href={`https://x.com/intent/post?text=${encodeURIComponent(caption)}`} target="_blank" rel="noopener noreferrer">Post to X</a></div>
-          <p className="text-sm text-[var(--muted)]">Attach the downloaded images on X in numerical order.</p>
-        </div>
-        <aside className={panelStyle}>
-          <div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold">X layout preview</h3>
-            <div className="flex gap-2">
-              <button type="button" className={!mobilePreview ? 'primary' : 'secondary-action'} aria-pressed={!mobilePreview} onClick={() => setMobilePreview(false)}>Desktop</button>
-              <button type="button" className={mobilePreview ? 'primary' : 'secondary-action'} aria-pressed={mobilePreview} onClick={() => setMobilePreview(true)}>Mobile</button>
-            </div>
-          </div>
-          <p className="my-2 text-sm text-[var(--muted)]">Illustrative preview. X may crop or arrange the images differently.</p>
-          <div className={`mx-auto grid gap-2 rounded-lg border border-[var(--line)] p-3 ${mobilePreview ? 'max-w-64' : ''}`}>
-            {caption && <p className="break-words whitespace-pre-wrap">{caption}</p>}
-            <ol className={`grid gap-1 ${mobilePreview ? 'grid-cols-2' : 'grid-cols-4'}`}>
-              {tiles.map((tile, i) => <li className="flex h-16 items-center justify-center overflow-hidden rounded bg-[var(--surface)]" key={i}>
-                <TilePreview tile={tile} source={source} url={preview} /><span className="sr-only">Tile {i + 1}</span>
-              </li>)}
-            </ol>
-          </div>
-        </aside>
       </div>
     </div>}
     {busy && <p role="status" className="mt-4">{busy}</p>}

@@ -92,7 +92,7 @@ const details:Record<string,Detail>={
  'split-image':{
   steps:[['Choose an image','Select, drop or paste a JPG, PNG or WebP, or try the sample panorama.'],['Set the grid','Choose Vertical or Horizontal for strips, or Grid for rows and columns. Preview up to 20 pieces.'],['Save your tiles','Choose PNG or JPEG, then download individual tiles or the complete ZIP.']],
   questions:['Can I split a panorama into columns?','What happens if the image does not divide evenly?','Are images uploaded?'],
-  facts:['Yes. Choose Vertical and select up to 20 pieces. Download them in order for a multi-image post.','Tiles can differ by one pixel per axis so that the full image is covered without stretching. PNG retains transparency. JPEG fills transparent areas with white.','No. Your browser reads the image, makes the tiles and creates the ZIP on your device.'],
+  facts:['Yes. Choose Vertical and select up to 20 pieces. The strips are numbered from left to right.','Tiles can differ by one pixel per axis so that the full image is covered without stretching. PNG retains transparency. JPEG fills transparent areas with white.','No. Your browser reads the image, makes the tiles and creates the ZIP on your device.'],
  },
  'crop-image':{
   steps:[['Select an image','Choose or drop one JPG, PNG or WebP up to 50 MB.'],['Draw your crop','Drag over the preview or enter the X and Y position, width and height in pixels.'],['Save the cropped image','Choose JPG, PNG or WebP, then crop and download the result.']],

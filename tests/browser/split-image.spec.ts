@@ -44,7 +44,7 @@ test('splits a mobile image into ordered transparent PNGs and downloads a ZIP lo
   expect(requests).toEqual([]);
 });
 
-test('sample panorama supports 20 pieces, horizontal JPEG export and an X caption preview', async ({ page }) => {
+test('sample panorama supports 20 pieces, horizontal JPEG export', async ({ page }) => {
   await page.route('https://**/*', route => route.abort());
   await page.goto('/split-image/');
   await page.getByRole('button', { name: 'Try sample panorama' }).click();
@@ -60,10 +60,8 @@ test('sample panorama supports 20 pieces, horizontal JPEG export and an X captio
   const download = await pending;
   expect(download.suggestedFilename()).toBe('03.jpg');
   expect((await readFile((await download.path())!)).subarray(0, 3)).toEqual(Buffer.from([255, 216, 255]));
-  await page.getByLabel('Caption for X').fill('My panorama & tiles');
-  await page.getByRole('button', { name: 'Mobile', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Mobile', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('link', { name: 'Post to X' })).toHaveAttribute('href', 'https://x.com/intent/post?text=My%20panorama%20%26%20tiles');
+  await expect(page.getByLabel('Caption for X')).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'X layout preview' })).toHaveCount(0);
   await page.getByRole('button', { name: 'Remove', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Try sample panorama' })).toBeVisible();
 });
