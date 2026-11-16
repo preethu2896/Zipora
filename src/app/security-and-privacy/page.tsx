@@ -22,8 +22,8 @@ export default function SecurityAndPrivacy() {
         <p>Zipora processes files in your browser. Your files are never uploaded to a file-processing server. The tools are free and require no account, signup or payment.</p>
       </section>
       <section className="legal-section"><h2>Cookies and local preferences</h2>
-        <p>Zipora sets no tracking cookies today. Zipora loads no analytics trackers or active advertising scripts. The grey ad boxes are placeholders.</p>
-        <p>Recently used tool names are stored in this browser and stay on your device. We will update the <Link href="/privacy-policy/">Privacy Policy</Link> and add consent controls before introducing analytics or active advertising.</p>
+        <p>Zipora uses Vercel Web Analytics to measure visits and page views without tracking cookies. File contents stay on your device.</p>
+        <p>Recently used tool names are stored in this browser and stay on your device. See the <Link href="/privacy-policy/">Privacy Policy</Link> for details on what website analytics collects.</p>
       </section>
       <section className="legal-section"><h2>Website requests</h2>
         <p>The hosting provider may keep routine logs such as your IP address, browser, requested URL and time. The Product Hunt badge loads from Product Hunt. Your selected files are separate from these requests.</p>
