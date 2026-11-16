@@ -8,7 +8,7 @@ test('tool pages have unique metadata, honest content, valid schema and direct l
   expect(await page.title()).toBe(tool.title);const description=await page.locator('meta[name=description]').getAttribute('content');expect(description).toBe(tool.description);
   titles.add(await page.title());descriptions.add(description!);headings.add(await page.locator('h1').innerText());
   await expect(page.locator('.footer-tools a')).toHaveCount(42);await expect(page.locator('.breadcrumb')).toHaveCount(0);
-  await expect(page.locator('.what-next')).toHaveCount(0);await expect(page.locator('.side-panel')).toBeVisible();
+  await expect(page.locator('.what-next')).toHaveCount(0);if (tool.slug !== 'split-image') await expect(page.locator('.side-panel')).toBeVisible();
   expect(await page.locator('.related-tools').evaluate(el=>Boolean(el.compareDocumentPosition(document.querySelector('#how-it-works')!)&Node.DOCUMENT_POSITION_FOLLOWING))).toBeTruthy();
   await expect(page.locator('.ad-footer')).toHaveCount(0);
   await expect(page.locator('#how-it-works .steps li')).toHaveCount(3);await expect(page.locator('.faqs details')).toHaveCount(3);

@@ -140,10 +140,10 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     related: ["webp-to-jpg", "image-compressor", "resize-image", "crop-image", "jpg-to-png"],
   },
   "split-image": {
-    title: "Split Image Online – Cut Photos into PNG Tiles",
-    description: "Split a JPG, PNG or WebP into rows and columns. Preview the grid and download PNG tiles individually or in a ZIP, free in your browser.",
+    title: "Split Image Online – Cut Photos into Strips or Tiles",
+    description: "Split a JPG, PNG or WebP into up to 20 strips or grid tiles. Preview the order for X and download numbered PNGs or JPEGs, individually or in a ZIP.",
     heading: "Split a panorama into numbered panels",
-    example: "Set Rows to 1 and Columns to 4 to split a wide photo into four panels. Tile 01 is the leftmost panel and tile 04 is the rightmost.",
+    example: "Choose Vertical and set Pieces to 4 to split a wide photo into four panels. Attach them on X from 01 on the left through 04 on the right.",
     related: ["crop-image", "resize-image", "rotate-image", "image-compressor"],
   },
   "crop-image": {
