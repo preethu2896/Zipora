@@ -22,7 +22,7 @@ export const blogPosts:BlogPost[]=[
 ];
 export const blogPaths=['/blog/',removeBgArticle.path,...blogPosts.map(p=>`/blog/${p.slug}/`)];
 export const rowLabels=['Price','Signup needed?','Watermark on output?','Files uploaded to server?','Daily limit?','Tools included'];
-export const ziporaFacts=['Free; no paid plan','No account required','No added output watermark','No; processing stays in your browser','No daily usage counter; per-file and memory limits apply','41 tools: 18 PDF, 15 image and 8 other'];
+export const ziporaFacts=['Free; no paid plan','No account required','No added output watermark','No; processing stays in your browser','No daily usage counter; per-file and memory limits apply','42 tools: 18 PDF, 16 image and 8 other'];
 export function readingMinutes(post: BlogPost) {
   const guidance = comparisonGuidance[post.slug];
   const text = [post.intro, ...post.facts, ...post.ownUse, ...post.otherUse, post.verdict,

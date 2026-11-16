@@ -139,12 +139,19 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     example: "Convert the HEIC copy before attaching it to a form that accepts JPG. Start with the default quality, then compare the preview and file size. If the form has a strict size cap, use Image Compressor on the JPG afterward.",
     related: ["webp-to-jpg", "image-compressor", "resize-image", "crop-image", "jpg-to-png"],
   },
+  "split-image": {
+    title: "Split Image Online – Cut Photos into PNG Tiles",
+    description: "Split a JPG, PNG or WebP into rows and columns. Preview the grid and download PNG tiles individually or in a ZIP, free in your browser.",
+    heading: "Split a panorama into numbered panels",
+    example: "Set Rows to 1 and Columns to 4 to split a wide photo into four panels. Tile 01 is the leftmost panel and tile 04 is the rightmost.",
+    related: ["crop-image", "resize-image", "rotate-image", "image-compressor"],
+  },
   "crop-image": {
     title: "Crop Image Online – Crop JPG, PNG and WebP",
     description: "Crop an image by dragging a rectangle or entering exact pixel coordinates. Preview and download a JPG, PNG or WebP crop in your browser.",
     heading: "Keep just the part of a screenshot you need",
     example: "Drag around the relevant section, then check Width and Height before exporting. For a square image, set both to the same value and adjust X and Y until the frame includes the area you want.",
-    related: ["rotate-image", "resize-image", "image-compressor", "heic-to-jpg", "png-to-jpg", "jpg-to-png"],
+    related: ["split-image", "rotate-image", "resize-image", "image-compressor", "heic-to-jpg", "png-to-jpg"],
   },
   "protect-pdf": {
     title: "Protect PDF Online – Add a Password to Open It",

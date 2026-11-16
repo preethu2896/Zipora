@@ -13,13 +13,13 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
   await expect(page.locator('.home-sponsors li')).toHaveCount(12);
   await expect(page.locator('.home-sponsors li').last()).toContainText('Frame 12 is free');
   await expect(page.locator('.home-card-top .home-new')).toHaveCount(4);
-  await expect(page.locator('.home-transform')).toHaveCount(41);
+  await expect(page.locator('.home-transform')).toHaveCount(42);
   await expect(page.locator('.home-task-grid section')).toHaveCount(5);
   await expect(page.locator('.home-faq details')).toHaveCount(6);
 
   const links = page.locator('.home-tool-list .tool-link');
   const toolPaths = await links.evaluateAll(items => items.map(item => item.getAttribute('href')!));
-  expect(new Set(toolPaths).size).toBe(41);
+  expect(new Set(toolPaths).size).toBe(42);
   const sidebarPaths = await page.locator('#home-navigation section').evaluateAll(sections =>
     sections.slice(0, 3).flatMap(section => Array.from(section.querySelectorAll('a'), link => link.getAttribute('href'))),
   );
@@ -29,7 +29,7 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
   for (const href of toolPaths) expect((await request.get(href)).status(), href).toBe(200);
 
   const recent = page.locator('.landing-section').filter({ has: page.getByRole('heading', { name: 'Recently added' }) });
-  await expect(recent.locator('a')).toHaveText(['Video Compressor', 'Remove Background', 'Gemini Image Watermark Remover', 'Gemini Video Watermark Remover']);
+  await expect(recent.locator('a')).toHaveText(['Split Image', 'Video Compressor', 'Remove Background', 'Gemini Image Watermark Remover']);
   await page.keyboard.press('Control+k');
   const search = page.getByRole('searchbox');
   await expect(search).toBeFocused();
@@ -39,7 +39,7 @@ test('homepage sidebar, sponsor frames, and tool search work on desktop and mobi
   await expect(links).toHaveCount(0);
   await expect(page.getByText('No tools match')).toBeVisible();
   await search.fill('');
-  await expect(links).toHaveCount(41);
+  await expect(links).toHaveCount(42);
   await page.getByText('Do my files leave my device?', { exact: true }).click();
   await expect(page.getByText(/never uploaded to a file-processing server/)).toBeVisible();
 

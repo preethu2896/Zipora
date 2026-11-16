@@ -9,7 +9,7 @@ import styles from './advertise.module.css';
 
 const path = '/advertise/';
 const title = 'Advertise on Zipora — Sponsor a Frame, $30 a Month | Zipora';
-const description = "Put your brand in front of people using Zipora's 41 free tools. One frame, $30 a month, logo + name + tagline.";
+const description = "Put your brand in front of people using Zipora's 42 free tools. One frame, $30 a month, logo + name + tagline.";
 export const metadata = pageMetadata(path, title, description);
 
 const benefits = [

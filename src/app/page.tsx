@@ -10,11 +10,11 @@ import { sponsorFrames } from '@/lib/sponsors';
 import { siteTools, toolInfo } from '@/lib/site-content';
 
 export const metadata = {
-  ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 41 free PDF, image, video, QR and text tools. Merge, compress and convert files in your browser without signup or file uploads.'),
+  ...pageMetadata('/', 'Zipora — Free Online PDF, Image and QR Tools', 'Explore 42 free PDF, image, video, QR and text tools. Merge, compress and convert files in your browser without signup or file uploads.'),
   title: 'Free Online PDF, Image, Video and QR Tools | Zipora',
 };
 
-const recent = ['video-compressor', 'remove-background', 'gemini-watermark-remover', 'gemini-video-watermark-remover'];
+const recent = ['split-image', 'video-compressor', 'remove-background', 'gemini-watermark-remover'];
 const popular = [
   ['merge-pdf', 'Combine PDFs into one.', Layers],
   ['remove-background', 'Make the background transparent.', Scissors],
@@ -40,14 +40,14 @@ const tasks = [
 ] as const;
 
 const steps = [
-  ['Choose a tool', 'Pick any of the 41 tools. No signup needed.'],
+  ['Choose a tool', 'Pick any of the 42 tools. No signup needed.'],
   ['Drop your file', 'It processes in your browser. Nothing uploads.'],
   ['Download the result', 'Save the result. Your original stays untouched.'],
 ];
 
 const questions = [
   ['Do my files leave my device?', 'No. Your files are processed in your browser and never uploaded to a file-processing server.'],
-  ['Do I need an account?', 'No. All 41 tools are free to use without signing up.'],
+  ['Do I need an account?', 'No. All 42 tools are free to use without signing up.'],
   ['Does Zipora add a watermark?', 'Zipora adds no watermark to your downloads. Watermark PDF lets you add your own text or image when you choose to.'],
   ['Can I use Zipora on my phone?', 'Use a current mobile browser. Large files depend on your device’s memory, and some video tools work best in desktop Chrome or Edge.'],
   ['Will Zipora change my original file?', 'No. Download the result as a separate file.'],
@@ -62,12 +62,12 @@ export default function Home() {
       <main id="main" className="home-shell-content">
         <section className="home-intro">
           <h1>Free PDF, Image &amp; Video Tools</h1>
-          <p>41 free tools that run in your browser. Merge PDFs, remove backgrounds, compress videos. No added watermark or sign-up.</p>
+          <p>42 free tools that run in your browser. Merge PDFs, remove backgrounds, compress videos. No added watermark or sign-up.</p>
           <div className="home-actions">
             <a className="home-primary" href="#tools">Browse all tools <ArrowRight size={17} aria-hidden="true"/></a>
             <HomeSearch/>
           </div>
-          <p className="home-proof"><strong>41 tools</strong><span aria-hidden="true">·</span>100% private</p>
+          <p className="home-proof"><strong>42 tools</strong><span aria-hidden="true">·</span>100% private</p>
           <p className="home-privacy-line">Files stay in your browser. Nothing uploads.</p>
         </section>
 
@@ -139,6 +139,6 @@ export default function Home() {
       </main>
       <SiteFooter textWordmark/>
     </div>
-    <JsonLd data={{ '@context': 'https://schema.org', ...webPageSchema('/', 'Zipora — Free PDF, image and QR tools', '41 free browser-based tools for PDFs, images, QR codes and JSON. No signup or file uploads.') }}/>
+    <JsonLd data={{ '@context': 'https://schema.org', ...webPageSchema('/', 'Zipora — Free PDF, image and QR tools', '42 free browser-based tools for PDFs, images, QR codes and JSON. No signup or file uploads.') }}/>
   </div>;
 }

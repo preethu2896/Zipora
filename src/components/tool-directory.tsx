@@ -30,6 +30,7 @@ const examples: Record<string, [string, string]> = {
   'pdf-to-jpg': ['PDF', 'JPG'],
   'pdf-to-png': ['PDF', 'PNG'],
   'crop-image': ['Photo', 'Cropped photo'],
+  'split-image': ['Photo', 'PNG tiles'],
   'rotate-image': ['Sideways image', 'Upright image'],
   'heic-to-jpg': ['HEIC', 'JPG'],
   'webp-to-jpg': ['WebP', 'JPG'],

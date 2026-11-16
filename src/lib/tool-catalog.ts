@@ -12,6 +12,7 @@ export const tools = [
   { href: '/protect-pdf/', name: 'Protect PDF', description: 'Require a password to open your PDF.' },
   { href: '/unlock-pdf/', name: 'Unlock PDF', description: 'Save a PDF without its password.' },
   { href: '/crop-image/', name: 'Crop Image', description: 'Trim a photo or screenshot to size.' },
+  { href: '/split-image/', name: 'Split Image', description: 'Divide an image into a grid of PNG tiles.' },
   { href: '/rotate-image/', name: 'Rotate Image', description: 'Turn images left or right.' },
   { href: '/heic-to-jpg/', name: 'HEIC to JPG', description: 'Turn HEIC photos into JPGs.' },
   { href: '/compress-pdf/', name: 'Compress PDF', description: 'A smaller document, ready to share.' },

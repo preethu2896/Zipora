@@ -89,6 +89,11 @@ const details:Record<string,Detail>={
   questions:['Can I convert iPhone HEIC photos to JPG?','Will the JPG keep the original dimensions and metadata?','Can I convert multiple photos at once?'],
   facts:['Yes. Select HEIC or HEIF photos from your device. The browser decodes and converts them locally. A Live Photo video or additional frames are outside the still-image export.','The JPG keeps the decoded photo dimensions. Outputs are limited to 50 megapixels and 8192 pixels per side. The conversion does not copy EXIF data such as location or camera details. Keep your HEIC files if you need that metadata.','Yes. Select up to 12 photos and download the converted JPGs together in a ZIP. Files are numbered in selection order. A single photo downloads directly as a JPG.'],
  },
+ 'split-image':{
+  steps:[['Choose an image','Select or drop a JPG, PNG or WebP.'],['Set the grid','Choose rows and columns and check the cut lines in the preview.'],['Save your tiles','Split the image and download individual PNGs or the complete ZIP.']],
+  questions:['Can I split a panorama into columns?','What happens if the image does not divide evenly?','Are images uploaded?'],
+  facts:['Yes. Keep Rows at 1 and pick the number of Columns you want, up to 10.','Tiles can differ by one pixel per axis so that the full image is covered without stretching. PNG output retains transparency from the source.','No. Your browser reads the image, makes the tiles and creates the ZIP on your device.'],
+ },
  'crop-image':{
   steps:[['Select an image','Choose or drop one JPG, PNG or WebP up to 50 MB.'],['Draw your crop','Drag over the preview or enter the X and Y position, width and height in pixels.'],['Save the cropped image','Choose JPG, PNG or WebP, then crop and download the result.']],
   questions:['What do Position X and Position Y mean?','Does cropping stretch or resize the selected area?','Which formats keep a transparent background?'],
@@ -156,6 +161,7 @@ const cardDescriptions:Record<string,string>={
  'webp-to-jpg':'Turn WebP images into JPG.',
  'rotate-image':'Turn images left or right.',
  'heic-to-jpg':'Convert HEIC photos to JPG.',
+ 'split-image':'Split photos into a grid of PNG tiles.',
  'crop-image':'Trim photos and screenshots.',
  'protect-pdf':'Lock a PDF with a password.',
  'unlock-pdf':'Remove PDF password protection.',
