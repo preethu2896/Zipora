@@ -74,10 +74,10 @@ test('portrait segmentation replaces the background, restores original and expor
 
 test('hero search filters the grouped tools and clears after choosing a tool',async({page})=>{
  await page.goto('/');await expect(page.locator('.home-tool-list a')).toHaveCount(42);await expect(page.locator('.site-header input')).toHaveCount(0);
- await page.getByLabel('Search tools in hero').fill('passport');await expect(page.locator('.home-tool-list a')).toHaveCount(1);
- await page.getByLabel('Search tools in hero').fill('nonexistent');await expect(page.getByRole('status')).toContainText('0 tools found');
- await page.getByLabel('Search tools in hero').fill('');await expect(page.locator('.home-tool-list a')).toHaveCount(42);
- await page.getByLabel('Search tools in hero').fill('merge');await page.locator('.home-tool-list a[href="/merge-pdf/"]').click();await expect(page.locator('.site-header input')).toHaveCount(0);
+ await page.getByLabel('Search tools').fill('passport');await expect(page.locator('.home-tool-list a')).toHaveCount(1);
+ await page.getByLabel('Search tools').fill('nonexistent');await expect(page.getByRole('status')).toContainText('0 tools found');
+ await page.getByLabel('Search tools').fill('');await expect(page.locator('.home-tool-list a')).toHaveCount(42);
+ await page.getByLabel('Search tools').fill('merge');await page.locator('.home-tool-list a[href="/merge-pdf/"]').click();await expect(page.locator('.site-header input')).toHaveCount(0);
 });
 test('transparent PNG conversion uses an actual white JPG matte',async({page})=>{
  await page.goto('/');const base64=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=32;c.height=32;return c.toDataURL('image/png').split(',')[1];});

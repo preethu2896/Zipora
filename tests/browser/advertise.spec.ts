@@ -1,20 +1,17 @@
 import { expect, test } from '@playwright/test';
 
-test('sponsor links, selection, validation and email draft', async ({ page }) => {
+test('sponsor links, automatic assignment, validation and email draft', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await expect(page.locator('.home-sponsors a')).toHaveCount(12);
+  await expect(page.locator('.home-sponsors')).toHaveCount(0);
   await expect(page.locator('.zipora-footer').getByRole('link', { name: 'Advertise' })).toHaveAttribute('href', '/advertise/');
-  await page.locator('.home-sponsors a').last().click();
-  await expect(page.getByText('Frame 12 — $30 a month')).toBeVisible();
+  await page.getByRole('link', { name: 'Sponsor Zipora' }).click();
+  await expect(page.getByText('Pick a frame')).toHaveCount(0);
+  await expect(page.getByText('Zipora assigns an available frame for your sponsorship.')).toBeVisible();
   await page.goto('/advertise/?frame=5');
-  await expect(page.getByText('Frame 5 — $30 a month')).toBeVisible();
-  await page.goto('/advertise/?frame=99');
-  await expect(page.locator('button[aria-pressed=true]')).toHaveCount(0);
   const submit = page.getByRole('button', { name: /Continue to payment/ });
   await submit.click();
-  await expect(page.locator('main').getByRole('alert')).toHaveCount(6);
-  await page.getByRole('button', { name: '01 Free Featured' }).click();
+  await expect(page.locator('main').getByRole('alert')).toHaveCount(5);
   await page.getByLabel('Brand name').fill('Example');
   await page.getByLabel('Tagline').fill('A test tagline');
   await expect(page.getByText('7/16')).toBeVisible();
@@ -33,6 +30,7 @@ test('sponsor links, selection, validation and email draft', async ({ page }) =>
   await submit.click();
   await expect(page.locator('main').getByRole('status')).toContainText('Payment is not connected yet');
   const draft = await page.getByRole('link', { name:'Email contact@zipora.online' }).getAttribute('href');
+  expect(decodeURIComponent(draft!)).toContain('Frame: 5');
   expect(decodeURIComponent(draft!)).toContain('Tagline: A test tagline');
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
   await page.setViewportSize({ width:1440, height:900 });

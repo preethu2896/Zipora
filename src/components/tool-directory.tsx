@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { HomeSearch } from './home-header';
 import { ArrowRight, FileText, Image, Wrench } from 'lucide-react';
 import { siteTools } from '@/lib/site-content';
 import { useToolSearch } from './tool-search';
@@ -62,6 +63,7 @@ export default function ToolDirectory({ newest }: { newest: string[] }) {
       <span className="home-tag" role="status">{shown.length} {shown.length === 1 ? 'tool' : 'tools'}{term ? ' found' : ''}</span>
     </div>
     <p className="home-section-copy">All-in-one free toolkit: no watermark, no sign-up. Files are processed on your device.</p>
+    <div className="home-directory-search"><HomeSearch/></div>
     {groups.map(([group, id, Icon]) => {
       const tools = shown.filter(tool => tool.group === group);
       if (!tools.length) return null;

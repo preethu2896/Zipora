@@ -3,7 +3,7 @@
 import { Download, Upload } from 'lucide-react';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { exportCrop, type CropRect } from '@/lib/crop-image';
-import { canvasBlob, OUTPUT_PIXEL_LIMIT, readImage, type ImageFormat } from '@/lib/image-processing';
+import { OUTPUT_PIXEL_LIMIT, readImage, type ImageFormat } from '@/lib/image-processing';
 import { useBlobUrl } from './use-blob-url';
 
 type Direction = 'Vertical' | 'Horizontal' | 'Grid';
@@ -109,21 +109,9 @@ export function SplitImageTool() {
   }, []);
 
   async function loadSample() {
-    const response = await fetch('/home-compression-sample.png');
+    const response = await fetch('/split-image-sample.jpg');
     if (!response.ok) throw new Error('Could not load the sample. Try selecting an image instead.');
-    const bitmap = await createImageBitmap(await response.blob());
-    const canvas = document.createElement('canvas');
-    canvas.width = bitmap.width;
-    canvas.height = Math.round(bitmap.width * 0.375);
-    try {
-      const context = canvas.getContext('2d');
-      if (!context) throw new Error('Your browser could not prepare the sample.');
-      context.drawImage(bitmap, 0, Math.floor((bitmap.height - canvas.height) / 2), canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-      return new File([await canvasBlob(canvas, 'image/png')], 'zipora-sample-panorama.png', { type: 'image/png' });
-    } finally {
-      bitmap.close();
-      canvas.width = canvas.height = 0;
-    }
+    return new File([await response.blob()], 'spider-man.jpg', { type: 'image/jpeg' });
   }
 
   async function download(index?: number) {

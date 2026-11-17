@@ -1,12 +1,13 @@
 import Link from 'next/link';
-import { ArrowRight, ChevronRight, FileText, Image, Layers, Plus, Scissors, Video } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Plus } from 'lucide-react';
 import { AdSlot, SiteFooter } from '@/components/site-chrome';
-import { HomeHeader, HomeSearch } from '@/components/home-header';
+import { HomeHeader } from '@/components/home-header';
+import { HomeSplitPreview } from '@/components/home-split-preview';
 import { JsonLd } from '@/components/json-ld';
 import { RecentToolLinks } from '@/components/recent-tool-links';
 import ToolDirectory from '@/components/tool-directory';
 import { pageMetadata, webPageSchema } from '@/lib/seo';
-import { sponsorFrames } from '@/lib/sponsors';
+import { SponsorFrameList } from '@/components/sponsor-frame-list';
 import { siteTools, toolInfo } from '@/lib/site-content';
 
 export const metadata = {
@@ -16,12 +17,14 @@ export const metadata = {
 
 const recent = ['split-image', 'video-compressor', 'remove-background', 'gemini-watermark-remover'];
 const popular = [
-  ['merge-pdf', 'Combine PDFs into one.', Layers],
-  ['remove-background', 'Make the background transparent.', Scissors],
-  ['compress-pdf', 'Reduce PDF file size.', FileText],
-  ['compress-image-to-20kb', 'Fit an image to a 20 KB limit.', Image],
-  ['video-compressor', 'Save a smaller MP4.', Video],
-  ['image-compressor', 'Reduce image file size.', Image],
+  ['merge-pdf', 'Combine PDFs into one.'],
+  ['remove-background', 'Make the background transparent.'],
+  ['compress-pdf', 'Reduce PDF file size.'],
+  ['compress-image-to-20kb', 'Fit an image to a 20 KB limit.'],
+  ['video-compressor', 'Save a smaller MP4.'],
+  ['image-compressor', 'Reduce image file size.'],
+  ['resize-image', 'Set new image dimensions.'],
+  ['qr-code-generator', 'Make a downloadable QR code.'],
 ] as const;
 
 const free = [
@@ -61,40 +64,28 @@ export default function Home() {
     <div className="home-content">
       <main id="main" className="home-shell-content">
         <section className="home-intro">
-          <h1>Free PDF, Image &amp; Video Tools</h1>
-          <p>42 free tools that run in your browser. Merge PDFs, remove backgrounds, compress videos. No added watermark or sign-up.</p>
+          <p className="home-hero-label"><strong>Free</strong> Browser-based file tools</p>
+          <h1>Free PDF, Image &amp; <br/><span>Video Tools</span></h1>
+          <p>Merge PDFs, edit images, and compress video.<br className="home-hero-break"/> No sign-up or added watermark.</p>
           <div className="home-actions">
             <a className="home-primary" href="#tools">Browse all tools <ArrowRight size={17} aria-hidden="true"/></a>
-            <HomeSearch/>
           </div>
-          <p className="home-proof"><strong>42 tools</strong><span aria-hidden="true">·</span>100% private</p>
-          <p className="home-privacy-line">Files stay in your browser. Nothing uploads.</p>
+          <HomeSplitPreview/>
         </section>
 
         <AdSlot position="hero"/>
 
-        <section className="home-block">
-          <h2>Most used</h2>
-          <div className="home-popular home-pair-grid">{popular.map(([slug, subtitle, Icon]) => <Link href={`/${slug}/`} key={slug}>
-            <span className="home-icon"><Icon size={20} aria-hidden="true"/></span>
-            <span><strong>{toolInfo(slug).name}</strong><small>{subtitle}</small></span>
-            <ChevronRight size={18} aria-hidden="true"/>
+        <section className="home-block home-featured" aria-labelledby="popular-tools">
+          <h2 id="popular-tools">Popular tools</h2>
+          <div className="home-popular home-pair-grid">{popular.map(([slug, subtitle]) => <Link href={`/${slug}/`} key={slug}>
+            <div className="home-feature-art">
+              <img src={`/popular-tools/${slug}.webp`} width={960} height={640} alt="" loading="lazy"/>
+            </div>
+            <span className="home-feature-caption"><span><strong>{toolInfo(slug).name}</strong><small>{subtitle}</small></span><ArrowUpRight aria-hidden="true"/></span>
           </Link>)}</div>
         </section>
 
-        <section className="home-block">
-          <div className="home-sponsor-heading">
-            <div className="home-heading"><h2>Sponsors keep Zipora free</h2><span className="home-tag">Ad</span></div>
-            <Link className="home-text-link" href="/advertise/">Put your brand here · $30 a month →</Link>
-          </div>
-          <ol className="home-sponsors" aria-label="Available sponsor frames">
-            {sponsorFrames.map(frame => <li key={frame.number}>
-              <span>Frame {frame.number} is {frame.taken ? 'taken' : 'free'}</span><small>Put your brand here · $30 a month</small>
-              {!frame.taken && <Link className="home-text-link" href={`/advertise/?frame=${frame.number}`}>Book this frame →</Link>}
-            </li>)}
-          </ol>
-        </section>
-
+        <SponsorFrameList/>
         <ToolDirectory newest={recent}/>
         <RecentToolLinks tools={siteTools.map(({ slug, name }) => ({ slug, name }))} added={recent}/>
 
@@ -126,7 +117,7 @@ export default function Home() {
         </section>
 
         <section className="home-block" id="faq">
-          <h2>Frequently asked questions</h2>
+          <h2 id="faq">Frequently asked questions</h2>
           <div className="home-faq">{questions.map(([question, answer]) => <details key={question}>
             <summary>{question}<Plus size={18} aria-hidden="true"/></summary><p>{answer}</p>
           </details>)}</div>

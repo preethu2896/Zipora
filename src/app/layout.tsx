@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import { GeistSans } from 'geist/font/sans';
 import './globals.css';
 import './polish.css';
 import './home.css';
 import './motion.css';
+import './design.css';
 import { ToolSearchProvider } from '@/components/tool-search';
 import { siteUrl } from '@/lib/site-url';
 import { ToolRouteScroll } from '@/components/tool-route-scroll';
@@ -18,5 +20,5 @@ export const metadata: Metadata = {
   verification: { other: { 'msvalidate.01': '23D589D329DA0DF7BB87D77E51035641' } },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html id="top" lang="en"><body><div className="site-scroll-progress" aria-hidden="true"/><JsonLd data={siteSchema()}/><ToolSearchProvider><ToolRouteScroll/><ToolSession>{children}</ToolSession></ToolSearchProvider><Analytics /></body></html>;
+  return <html id="top" lang="en" className={GeistSans.variable}><body><div className="site-scroll-progress" aria-hidden="true"/><JsonLd data={siteSchema()}/><ToolSearchProvider><ToolRouteScroll/><ToolSession>{children}</ToolSession></ToolSearchProvider><Analytics /></body></html>;
 }
