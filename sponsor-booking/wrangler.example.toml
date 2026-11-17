@@ -1,0 +1,18 @@
+name = "zipora-sponsors"
+main = "worker.mjs"
+compatibility_date = "2026-11-17"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+SPONSOR_MODE = "live"
+DODO_PRODUCT_ID = "pdt_0Ns87v7FXQYIDmOEPVzdQ"
+DODO_PAYMENT_LINK = "https://checkout.dodopayments.com/buy/pdt_0Ns87v7FXQYIDmOEPVzdQ?quantity=1"
+SPONSOR_WEB_ORIGIN = "https://www.zipora.online"
+SPONSOR_RETURN_ORIGIN = "https://REPLACE_WITH_WORKER_HOST"
+SPONSOR_EMAIL_FROM = "REPLACE_WITH_VERIFIED_RESEND_SENDER"
+SPONSOR_EMAIL_TO = "contact@zipora.online"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "zipora-sponsors-live"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
