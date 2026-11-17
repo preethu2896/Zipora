@@ -9,7 +9,7 @@ test('sponsor links, automatic assignment, validation and email draft', async ({
   await expect(page.getByText('Pick a frame')).toHaveCount(0);
   await expect(page.getByText('Zipora assigns an available frame for your sponsorship.')).toBeVisible();
   await page.goto('/advertise/?frame=5');
-  const submit = page.getByRole('button', { name: /Continue to payment/ });
+  const submit = page.getByRole('button', { name: /Prepare sponsorship email/ });
   await submit.click();
   await expect(page.locator('main').getByRole('alert')).toHaveCount(5);
   await page.getByLabel('Brand name').fill('Example');

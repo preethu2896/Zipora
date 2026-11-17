@@ -1,0 +1,80 @@
+name: Deploy Zipora to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zipora-pages-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SPONSOR_LIVE_API: https://zipora-sponsors.preethambhandary385.workers.dev
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install and test
+        run: |
+          npm ci
+          npm test
+
+      - name: Build production site
+        run: |
+          npm run build
+          npm run typecheck
+
+      - name: Verify sponsor checkout configuration
+        run: |
+          grep -Fq 'Continue to payment' out/advertise/index.html
+          grep -Fq '$30 one-time' out/advertise/index.html
+          grep -Eq '\$30[[:space:]]*(<[^>]+>[[:space:]]*)*USD' out/advertise/index.html
+          grep -RFql --include='*.js' "$NEXT_PUBLIC_SPONSOR_LIVE_API" out/_next/static
+          grep -RFql --include='*.js' 'Payment successful.' out/_next/static
+          test -f out/_redirects
+          curl --fail --silent --show-error --max-time 15 \
+            -H 'Origin: https://www.zipora.online' \
+            -D "${RUNNER_TEMP}/zipora-frames-headers" \
+            "$NEXT_PUBLIC_SPONSOR_LIVE_API/frames" \
+            | node -e "if (!Array.isArray(JSON.parse(require('node:fs').readFileSync(0, 'utf8')))) process.exit(1)"
+          grep -Eiq '^access-control-allow-origin: https://www\.zipora\.online' "${RUNNER_TEMP}/zipora-frames-headers"
+
+      - name: Deploy static site
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ac58e1f864ad3f38f9b2ff72627caff4
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Set the repository secret CLOUDFLARE_API_TOKEN before deploying."
+            exit 1
+          fi
+          npx --yes wrangler@4.164.0 pages deploy out --project-name zipora-online --branch main --commit-hash "$GITHUB_SHA"
+
+      - name: Verify public sponsor page
+        run: |
+          for attempt in {1..12}; do
+            if curl --fail --silent --show-error --max-time 15 \
+                'https://www.zipora.online/advertise/' -o "${RUNNER_TEMP}/zipora-advertise.html" \
+                && grep -Fq 'Continue to payment' "${RUNNER_TEMP}/zipora-advertise.html" \
+                && grep -Fq '$30 one-time' "${RUNNER_TEMP}/zipora-advertise.html"; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Public sponsor page verification failed."
+          exit 1

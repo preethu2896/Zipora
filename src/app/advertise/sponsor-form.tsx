@@ -9,6 +9,15 @@ import { sponsorFrames } from '@/lib/sponsors';
 import styles from './advertise.module.css';
 
 type Field = 'frame' | 'brand' | 'tagline' | 'link' | 'logo' | 'email';
+const bookingKey = 'zipora-sponsor-booking';
+type PaymentStatus = 'pending' | 'paid' | 'review' | 'unpaid' | 'unavailable';
+const statusMessages: Record<PaymentStatus, string> = {
+  pending: 'We’re waiting for Dodo to confirm your payment. Check back shortly before making another payment.',
+  paid: 'Payment successful. We’ll review your sponsor details, add your logo to Zipora shortly, and email you when it’s live.',
+  review: 'We received your payment and are reviewing your booking. We’ll contact you by email.',
+  unpaid: 'Payment was not completed. You can submit the form again to reopen checkout.',
+  unavailable: 'We couldn’t check your payment here. If you paid, email contact@zipora.online with your Dodo receipt.',
+};
 const logoTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/svg+xml'];
 
 export function SponsorForm() {
@@ -20,7 +29,7 @@ export function SponsorForm() {
   const [mailto, setMailto] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [returned, setReturned] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>();
   const availability = useSponsorAvailability();
   const availableFrames = sponsorFrames.filter(item => !item.taken && !availability?.some(entry => entry.number === item.number));
   const frame = availableFrames.find(item => item.number === requestedFrame)?.number ?? availableFrames[0]?.number;
@@ -29,9 +38,48 @@ export function SponsorForm() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const parameter = params.get('frame');
-    setReturned(params.get('checkout') === 'returned');
+
     const selection = sponsorFrames.find(item => !item.taken && String(item.number) === parameter);
     setRequestedFrame(selection?.number);
+  }, []);
+
+  useEffect(() => {
+    if (!sponsorApi || new URLSearchParams(window.location.search).get('checkout') !== 'returned') return;
+    const controller = new AbortController();
+    let timer: number | undefined;
+    const stopAt = Date.now() + 90_000;
+
+    async function check() {
+      try {
+        const id = sessionStorage.getItem(bookingKey);
+        if (!id) {
+          setPaymentStatus('unavailable');
+          return;
+        }
+        const response = await fetch(`${sponsorApi}/checkout-status/${encodeURIComponent(id)}`, {
+          cache: 'no-store', signal: controller.signal,
+        });
+        if (response.status === 404) {
+          setPaymentStatus('unavailable');
+          return;
+        }
+        if (!response.ok) throw new Error('Could not verify payment.');
+        const { status } = await response.json();
+        if (controller.signal.aborted) return;
+        if (status === 'paid' || status === 'review' || status === 'unpaid') {
+          setPaymentStatus(status);
+          return;
+        }
+      } catch {
+        if (controller.signal.aborted) return;
+      }
+      if (Date.now() < stopAt) timer = window.setTimeout(check, 3000);
+      else setPaymentStatus('unavailable');
+    }
+
+    setPaymentStatus('pending');
+    void check();
+    return () => { controller.abort(); window.clearTimeout(timer); };
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -69,6 +117,14 @@ export function SponsorForm() {
         const destination = new URL(result.checkoutUrl);
         const checkoutOrigin = liveSponsorApi ? 'https://checkout.dodopayments.com' : 'https://test.checkout.dodopayments.com';
         if (destination.origin !== checkoutOrigin) throw new Error('Could not open Dodo checkout.');
+        if (typeof result.bookingId !== 'string' || !/^[a-f0-9-]{36}$/.test(result.bookingId)) {
+          throw new Error('Could not verify the checkout booking.');
+        }
+        try {
+          sessionStorage.setItem(bookingKey, result.bookingId);
+        } catch {
+          // Dodo can still process the payment and notify Zipora without browser storage.
+        }
         window.location.assign(destination.href);
       } catch (error) {
         setCheckoutError(error instanceof Error ? error.message : 'Could not start checkout. Please try again.');
@@ -86,9 +142,13 @@ export function SponsorForm() {
     return errors[field] && <p id={`sponsor-${field}-error`} className={styles.error} role="alert">{errors[field]}</p>;
   }
 
+  if (paymentStatus && paymentStatus !== 'unpaid') {
+    return <p className={styles.confirmation} role="status">{statusMessages[paymentStatus]}</p>;
+  }
+
   return <form noValidate onSubmit={submit} onChange={() => setMailto('')} className={styles.form} aria-busy={busy}>
     {sponsorApi && !liveSponsorApi && <p className={styles.hint}>Test checkout only. Use sample details and a Dodo test card.</p>}
-    {sponsorApi && returned && <p role="status">You’ve returned from checkout. Zipora checks the payment with Dodo before the frame goes to review.</p>}
+    {paymentStatus === 'unpaid' && <p role="status">{statusMessages.unpaid}</p>}
     {sponsorApi && !availability && <p className={styles.hint}>Checking frame availability. Please wait before continuing.</p>}
     <p className={styles.hint}>Zipora assigns an available frame for your sponsorship.</p>
     {error('frame')}
@@ -122,7 +182,7 @@ export function SponsorForm() {
       <p className={styles.hint} id="sponsor-email-hint">For the receipt, and to tell you when your frame is live.</p>{error('email')}</div>
     <div><label htmlFor="sponsor-notes">Anything else (optional)</label>
       <textarea id="sponsor-notes" name="notes" rows={3} maxLength={1000}/></div>
-    <button className={styles.primary} type="submit" disabled={busy || Boolean(sponsorApi && !availability)}>{busy ? 'Opening checkout…' : liveSponsorApi ? 'Continue to payment — $30' : sponsorApi ? 'Continue to test payment — $30' : 'Continue to payment — $30 / month'}</button>
+    <button className={styles.primary} type="submit" disabled={busy || Boolean(sponsorApi && !availability)}>{busy ? 'Opening checkout…' : liveSponsorApi ? 'Continue to payment — $30 one-time' : sponsorApi ? 'Continue to test payment — $30 one-time' : 'Prepare sponsorship email'}</button>
     {checkoutError && <p className={styles.error} role="alert">{checkoutError}</p>}
     <p className={styles.hint}>By submitting, you agree to the <Link href="/terms/">Terms</Link> and to the Not-allowed list above.</p>
     {mailto && <div className={styles.confirmation} role="status">
